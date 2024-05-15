@@ -36,9 +36,10 @@ export default function RootLayout() {
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <Stack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-       <Stack.Screen name="search/index" options={{ headerShown: false }} />
-       <Stack.Screen name="history/index" options={{ headerShown: false }} />
-        <Stack.Screen name="video-list/[slug]" options={{ headerShown:false }} />
+        <Stack.Screen name="search/index" options={{ headerShown: false }} />
+        <Stack.Screen name="history/index" options={{ headerShown: false }} />
+        <Stack.Screen name="profile/index" options={{ headerShown: false }} />
+        <Stack.Screen name="video-list/[slug]" options={{ headerShown: false }} />
         <Stack.Screen name="+not-found" />
       </Stack>
     </ThemeProvider>
