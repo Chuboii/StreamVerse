@@ -14,7 +14,13 @@ export default function RootLayout() {
   const colorScheme = useColorScheme();
   const [loaded] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-  });
+    ExoRegular: require('../assets/fonts/Exo2-Regular.ttf'),
+    ExoLight: require('../assets/fonts/Exo2-Light.ttf'),
+    KanitRegular: require('../assets/fonts/Kanit-Regular.ttf'),
+    KanitLight: require('../assets/fonts/Kanit-ExtraLight.ttf'),
+    KanitBold: require('../assets/fonts/Kanit-Bold.ttf'),
+    KanitThin: require('../assets/fonts/Kanit-Thin.ttf'),
+  })
 
   useEffect(() => {
     if (loaded) {
@@ -30,6 +36,9 @@ export default function RootLayout() {
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <Stack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+       <Stack.Screen name="search/index" options={{ headerShown: false }} />
+       <Stack.Screen name="history/index" options={{ headerShown: false }} />
+        <Stack.Screen name="video-list/[slug]" options={{ headerShown:false }} />
         <Stack.Screen name="+not-found" />
       </Stack>
     </ThemeProvider>

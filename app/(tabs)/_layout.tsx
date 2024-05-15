@@ -11,42 +11,60 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
+      tabBarShowLabel: false,
         tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
         headerShown: false,
+        tabBarStyle:{height:70, borderTopLeftRadius:30,borderTopRightRadius:30}
       }}>
       <Tabs.Screen
-        name="local"
+        name="(top tabs)"
         options={{
-          title: 'Home',
           tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'file' : 'file-outline'} color={color} />
+            <TabBarIcon name={focused ? 'folder' : 'folder-open-outline'} color={color} />
           ),
         }}
       />
       <Tabs.Screen
         name="reels"
         options={{
+         
           title: 'Reels',
           tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'code-slash' : 'code-slash-outline'} color={color} />
+            <TabBarIcon name={focused ? 'videocam' : 'videocam-outline'} color={color} />
           ),
         }}
       />
-      <Tabs
-        screenOptions={{
-          tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-          headerShown: false,
-        }}>
+      <Tabs.Screen
+          name="createReel"
+          options={{
+            title: '',
+            tabBarIcon: ({ color, focused }) => (
+              <TabBarIcon style={{backgroundColor:"red", color:"white",
+              padding:5, borderRadius:7, paddingHorizontal:12, elevation:10}} name={focused ? 'add-sharp' : 'add-outline'}
+              color={color} />
+            ),
+          }}
+        />
+              <Tabs.Screen
+          name="videoDownloader"
+          options={{
+            title: 'Video Downloader',
+            tabBarIcon: ({ color, focused }) => (
+              <TabBarIcon name={focused ? 'cloud-download-sharp' :
+              'cloud-download-outline'} color={color} />
+            ),
+          }}
+        />
+
         <Tabs.Screen
           name="profile"
           options={{
             title: 'Profile',
             tabBarIcon: ({ color, focused }) => (
-              <TabBarIcon name={focused ? 'profile' : 'home-outline'} color={color} />
+              <TabBarIcon name={focused ? 'person-sharp' : 'person-outline'} color={color} />
             ),
           }}
         />
-      </Tabs>
 
     </Tabs>
   );
