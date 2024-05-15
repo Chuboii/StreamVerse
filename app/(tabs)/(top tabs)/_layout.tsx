@@ -41,11 +41,14 @@ const screenHeight = Dimensions.get("window").height
 export default function Layout() {
   const colorScheme = useColorScheme()
   const route = usePathname()
+  const colorStyle = colorScheme === 'light' ? styles.iconLight : styles.iconDark;
+  const bgStyle = colorScheme === 'light' ? styles.bgLight : styles.bgDark;
+
 
 
   return (
     <>
-      <SafeAreaView style={styles.container(colorScheme)}>
+      <SafeAreaView style={[styles.container, bgStyle]}>
 
         <PageHeaderTemplate />
       </SafeAreaView>
@@ -56,9 +59,9 @@ export default function Layout() {
         {
           route === "/" || route === "/folders" ?
             <Button component={<MaterialCommunityIcons name="format-list-text"
-              color="white" style={styles.icon(colorScheme)} />} />
+              color="white" style={[styles.icon, colorStyle]} />} />
             : <Button component={<AntDesign name="plussquareo" size={24}
-              style={styles.icon(colorScheme)} />} />}
+              style={[styles.icon, colorStyle]} />} />}
       </SafeAreaView>
 
       <MaterialTopTab
@@ -93,21 +96,31 @@ export default function Layout() {
 const screenWidth = Dimensions.get("screen").height
 
 const styles = StyleSheet.create({
-  container: (colorScheme) => ({
+  container: {
     padding: 0,
-    backgroundColor: Colors[colorScheme ?? "light"].transparent,
     paddingHorizontal: 10,
     paddingVertical: -10,
     paddingBottom: 40
-  }),
+  },
   iconBox: {
     position: "absolute",
     right: 20,
     top: 97,
     zIndex: 1,
   },
-  icon: (colorScheme) => ({
+  icon: {
     fontSize: 18,
-    color: Colors[colorScheme ?? "light"].tint
-  })
+  },
+  iconLight: {
+    color: Colors.light.tint,
+  },
+  iconDark: {
+    color: Colors.light.tint,
+  },
+  bgDark: {
+    backgroundColor: Colors.dark.background,
+  },
+  bgLight: {
+    backgroundColor: Colors.dark.background,
+  },
 })

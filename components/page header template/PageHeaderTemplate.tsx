@@ -17,9 +17,6 @@ import { FontAwesome5 } from '@expo/vector-icons';
 
 
 type Props = {
-  rightIcon1: ReactNode;
-  rightIcon2: ReactNode;
-  rightIcon3: ReactNode;
   style: StyleProp<ViewStyle>;
   isPageHeader: boolean
 }

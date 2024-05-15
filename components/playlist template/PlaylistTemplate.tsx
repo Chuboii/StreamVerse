@@ -17,8 +17,8 @@ type Prop = {
   wrapperStyle: object;
   wrapStyle: object;
   title: string;
-  quality: number
-  lengthOfVideos: number;
+  quality: string
+  lengthOfVideos: string;
   data: string;
   source: string;
   sourceStyle: object;
@@ -26,7 +26,7 @@ type Prop = {
   qualityBoxStyle: object;
   floatStyle: object;
   imageBoxStyle: object;
-  numOfVideos: number;
+  numOfVideos: string;
 }
 const PlayListTemplate = ({
   imageUrl, imageStyle, containerStyle, wrapperStyle,
