@@ -4,9 +4,8 @@ import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import 'react-native-reanimated';
-
 import { useColorScheme } from '@/hooks/useColorScheme';
-import {usePathname} from "expo-router"
+import { usePathname } from "expo-router"
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
@@ -37,28 +36,46 @@ export default function RootLayout() {
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <Stack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="search/index" options={{ headerShown: false,
-        animation: "slide_from_right" }} />
-        <Stack.Screen name="history/index" options={{ headerShown:
-        false,animation: "slide_from_right"
+        <Stack.Screen name="search/index" options={{
+          headerShown: false,
+          animation: "slide_from_right"
         }} />
-      <Stack.Screen name="history/local" options={{ headerShown: false,
-      animation: "none"
-                }} />
-   <Stack.Screen name="downloads/index" options={{ headerShown: false,
-      animation: "slide_from_right" }} />
-    <Stack.Screen name="favorites/index" options={{ headerShown: false,
-      animation: "slide_from_right" }} />
-        <Stack.Screen name="profile/(top tabs)" options={{ headerShown: false,
-        animation:"slide_from_right"}} />
-      <Stack.Screen name="menu/index" options={{ headerShown: false,
-        animation:"slide_from_right"}} />
-     <Stack.Screen name="feedback/index" options={{ headerShown: false,
-        animation:"slide_from_bottom"}} />
-     <Stack.Screen name="streams-video-details/[slug]" options={{ headerShown: false,
-        animation:"slide_from_bottom"}} />
-        <Stack.Screen name="video-list/[slug]" options={{ headerShown: false,
-        animation: "slide_from_bottom"}} />
+        <Stack.Screen name="history/index" options={{
+          headerShown:
+            false, animation: "slide_from_right"
+        }} />
+        <Stack.Screen name="history/local" options={{
+          headerShown: false,
+          animation: "none"
+        }} />
+        <Stack.Screen name="downloads/index" options={{
+          headerShown: false,
+          animation: "slide_from_right"
+        }} />
+        <Stack.Screen name="favorites/index" options={{
+          headerShown: false,
+          animation: "slide_from_right"
+        }} />
+        <Stack.Screen name="profile/(top tabs)" options={{
+          headerShown: false,
+          animation: "slide_from_right"
+        }} />
+        <Stack.Screen name="menu/index" options={{
+          headerShown: false,
+          animation: "slide_from_right"
+        }} />
+        <Stack.Screen name="feedback/index" options={{
+          headerShown: false,
+          animation: "slide_from_bottom"
+        }} />
+        <Stack.Screen name="streams-video-details/[slug]" options={{
+          headerShown: false,
+          animation: "slide_from_bottom"
+        }} />
+        <Stack.Screen name="video-list/[slug]" options={{
+          headerShown: false,
+          animation: "slide_from_bottom"
+        }} />
         <Stack.Screen name="+not-found" />
       </Stack>
     </ThemeProvider>

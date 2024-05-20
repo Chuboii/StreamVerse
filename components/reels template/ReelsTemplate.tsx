@@ -16,15 +16,15 @@ import { LinearGradient } from 'expo-linear-gradient';
 type Prop = {
   imageStyle: object;
   titleStyle: object;
-  containerStyle:object;
-  titleBox:object;
+  containerStyle: object;
+  titleBox: object;
   textStyle: object;
-  wrapStyle:object;
+  wrapStyle: object;
   iconStyle: object;
 }
 
-const ReelsTemplate: FC = ({imageStyle, titleStyle, containerStyle, textStyle,
-titleBox, wrapStyle, iconStyle}) : Prop => {
+const ReelsTemplate: FC<Prop> = ({ imageStyle = {}, titleStyle = {}, containerStyle = {}, textStyle = {},
+  titleBox = {}, wrapStyle = {}, iconStyle = {} }) => {
 
 
   return (

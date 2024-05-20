@@ -3,18 +3,19 @@ import { ReactNode, FC } from "react"
 type Props = {
   component?: ReactNode;
   onClick?: () => void;
-  style?: StyleProp<ViewStyle>
+  style?: StyleProp<ViewStyle>;
+  disabled: boolean;
 };
 
 
-const Button: FC<Props> = ({ onClick, style, component, disabled }) => {
+const Button: FC<Props> = ({ onClick = () => undefined, style = null, component = null, disabled = false }) => {
 
 
   return (
     <>
-    <TouchableOpacity style={style} onPress={onClick} disabled={disabled}>
-      {component}
-    </TouchableOpacity>
+      <TouchableOpacity style={style} onPress={onClick} disabled={disabled}>
+        {component}
+      </TouchableOpacity>
     </>
   )
 }

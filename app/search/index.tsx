@@ -18,7 +18,7 @@ export default function SearchPage() {
   return (
     <SafeAreaView>
       <View style={styles.wrapper}>
-        <Button onClick={navigateBack} component={<AntDesign name="arrowleft" size={24}
+        <Button disabled={false} onClick={navigateBack} component={<AntDesign name="arrowleft" size={24}
           style={[styles.icon, colorStyle]} />} />
         <TextInput
           style={[styles.input, colorStyle]}

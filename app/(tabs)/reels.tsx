@@ -5,7 +5,7 @@ import ReelVideoTemplate from "@/components/reels video/ReelsVideo"
 const { height: screenHeight } = Dimensions.get('window');
 
 const Reels = () => {
-  const scrollViewRef = useRef();
+  const scrollViewRef = useRef<ScrollView>(null)
   const scrollY = useRef(new Animated.Value(0)).current;
 
   const handleScroll = Animated.event(
@@ -13,15 +13,18 @@ const Reels = () => {
     { useNativeDriver: true }
   );
 
-  const scrollToVideo = (index) => {
+  const scrollToVideo = (index: any) => {
     if (scrollViewRef.current) {
-      scrollViewRef.current.scrollTo({ y: index * screenHeight, animated: true });
+      scrollViewRef.current.scrollTo({
+        y: index * screenHeight,
+        animated: true,
+      });
     }
   };
-  
+
 
   return (
-    <View style={{ flex: 1, backgroundColor:"blue" }}>
+    <View style={{ flex: 1, backgroundColor: "blue" }}>
       <ScrollView
         ref={scrollViewRef}
         pagingEnabled
@@ -29,7 +32,7 @@ const Reels = () => {
         onScroll={handleScroll}
         scrollEventThrottle={16}
       >
-     {/* <ReelVideoTemplate videoStyle={{ height: screenHeight + 100, width: "100%",
+        {/* <ReelVideoTemplate videoStyle={{ height: screenHeight + 100, width: "100%",
       backgroundColor:"red", flex:1 }} />
       <ReelVideoTemplate videoStyle={{ height: screenHeight + 100, width: "100%",
       backgroundColor:"red", flex:1 }} />

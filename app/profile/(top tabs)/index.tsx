@@ -1,4 +1,4 @@
-import { StyleSheet,FlatList, ScrollView, Text, View, Image } from 'react-native'
+import { StyleSheet, FlatList, ScrollView, Text, View, Image } from 'react-native'
 import VideoTemplate from "@/components/video template/VideoTemplate";
 
 import { AntDesign, MaterialCommunityIcons } from "@expo/vector-icons";
@@ -17,37 +17,43 @@ const Videos = () => {
   const colorStyle =
     colorScheme === "light" ? styles.colorLight : styles.colorDark;
   const navigateBack = () => router.back();
-  
+
   return (
     <View>
-    <VideoTemplate sourceIcon="camera-outline"
-    title="Bro didnt see that coming at all"
-  data="500mb"
-  lengthOfVideo="0:01"
-isUserProfile={true}
-sourceStyle={styles.sourceStyle}
-floatStyle={styles.sourceStyle}
-wrapQualityData={styles.sourceStyle}
-    />
+      <VideoTemplate sourceIcon="camera-outline"
+        title="Bro didnt see that coming at all"
+        data="500mb"
+        lengthOfVideo="0:01"
+        isUserProfile={true}
+        sourceStyle={styles.sourceStyle}
+        floatStyle={styles.sourceStyle}
+        wrapQualityData={styles.sourceStyle}
+      />
 
-    <VideoTemplate sourceIcon="camera-outline"
-    title="Bro didnt see that coming at all"
-  data="500mb"
-  lengthOfVideo="0:01"
-isUserProfile={true}
-sourceStyle={styles.sourceStyle}
-floatStyle={styles.sourceStyle}
-wrapQualityData={styles.sourceStyle}
-    />
+      <VideoTemplate sourceIcon="camera-outline"
+        title="Bro didnt see that coming at all"
+        data="500mb"
+        lengthOfVideo="0:01"
+        isUserProfile={true}
+        sourceStyle={styles.sourceStyle}
+        floatStyle={styles.sourceStyle}
+        wrapQualityData={styles.sourceStyle}
+      />
 
-</View>
+    </View>
   )
 }
 
 export default Videos
 
 const styles = StyleSheet.create({
-  sourceStyle:{
-    display:"none"
-  }
+  sourceStyle: {
+    display: "none"
+  },
+  colorLight: {
+    color: Colors.light.tint,
+  },
+  colorDark: {
+    color: Colors.dark.tint,
+  },
 })

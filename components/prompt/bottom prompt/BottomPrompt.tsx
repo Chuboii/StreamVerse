@@ -10,72 +10,72 @@ import StarRatingTemplate from "@/components/star rating template/StarRatingTemp
 
 
 const BottomPrompt = () => {
-  
+
   return (
     <View style={styles.container}>
-     <ThemedText style={styles.title}> Rate our app </ThemedText>
-     <StarRatingTemplate style={styles.icon}/>
-     <ThemedText style={styles.text}> What do you think of streamverse </ThemedText>
-     <View style={styles.wrapper}>
-     <Button style={styles.btn} component={<Text style={styles.btnText}> Cancel </Text>}/>
-    <Button style={[styles.btn, styles.btnActive]} component={<Text style={[styles.btnText,
-    styles.btnTextActive]}> OK </Text>}/>
+      <ThemedText style={styles.title}> Rate our app </ThemedText>
+      <StarRatingTemplate style={styles.icon} />
+      <ThemedText style={styles.text}> What do you think of streamverse </ThemedText>
+      <View style={styles.wrapper}>
+        <Button disabled={false} style={styles.btn} component={<Text style={styles.btnText}> Cancel </Text>} />
+        <Button disabled={false} style={[styles.btn, styles.btnActive]} component={<Text style={[styles.btnText,
+        styles.btnTextActive]}> OK </Text>} />
+      </View>
     </View>
-    </View>
-    )
+  )
 }
 
 export default BottomPrompt
 
 const styles = StyleSheet.create({
-  container:{
-    position:"absolute",
-    bottom:0,
-    backgroundColor:"#151718",
-    zIndex:100,
-    width:"100%",
-    borderTopRightRadius:40,
-    borderTopLeftRadius:40,
-    padding:15,
-    justifyContent:"center",
-    alignItems:"center",
-    paddingVertical:30
+  container: {
+    position: "absolute",
+    bottom: 0,
+    backgroundColor: "#151718",
+    zIndex: 100,
+    width: "100%",
+    borderTopRightRadius: 40,
+    borderTopLeftRadius: 40,
+    padding: 15,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingVertical: 30
   },
-  btn:{
-    backgroundColor:"gray",
-    marginHorizontal:5,
-    padding:15,
-    width:130,
-    borderRadius:10,
+  btn: {
+    backgroundColor: "gray",
+    marginHorizontal: 5,
+    padding: 15,
+    width: 130,
+    borderRadius: 10,
     opacity: .5
   },
-  btnText:{
-    fontFamily:"KanitRegular",
-    textAlign:"center"
+  btnText: {
+    fontFamily: "KanitRegular",
+    textAlign: "center"
   },
-  btnTextActive:{
-    color:"white"
+  btnTextActive: {
+    color: "white"
   },
-  btnActive:{
-    backgroundColor:"orangered"
+  btnActive: {
+    backgroundColor: "orangered"
   },
-  title:{
-    fontFamily:"KanitRegular",
-    fontSize:23,
-    marginBottom:15
+  title: {
+    fontFamily: "KanitRegular",
+    fontSize: 23,
+    marginBottom: 15
   },
-  text:{
-    color:'gray',
-    fontFamily:"KanitRegular",
-    fontSize:12,
-    marginTop:10
+  text: {
+    color: 'gray',
+    fontFamily: "KanitRegular",
+    fontSize: 12,
+    marginTop: 10
   },
-  wrapper:{
-    flexDirection:"row",
-    alignItems:"center",
-    marginTop:20
+  wrapper: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: 20
   },
-  icon:{
-    
+  icon: {
+
   }
 })

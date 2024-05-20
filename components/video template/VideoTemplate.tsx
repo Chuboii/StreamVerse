@@ -25,16 +25,17 @@ type Prop = {
   qualityBoxStyle: object;
   floatStyle: object;
   imageBoxStyle: object;
-  titleStyle:object;
+  titleStyle: object;
   isUserProfile: boolean;
-  wrapQualityData:object;
+  wrapQualityData: object;
 }
 
-const VideoTemplate = ({ imageUrl, imageStyle, containerStyle, wrapperStyle,
-  wrapStyle, title, quality, lengthOfVideo, data, source,
-  sourceStyle,wrapQualityData,
-  titleStyle, isUserProfile = false,
-  sourceIcon, qualityBoxStyle, floatStyle, imageBoxStyle }: Prop) => {
+const VideoTemplate = ({
+  imageUrl = "", imageStyle = {}, containerStyle = {}, wrapperStyle = {},
+  wrapStyle = {}, title = "", quality = "", lengthOfVideo = "", data = "", source = "",
+  sourceStyle = {}, wrapQualityData = {},
+  titleStyle = {}, isUserProfile = false,
+  sourceIcon = null, qualityBoxStyle = {}, floatStyle = {}, imageBoxStyle = {} }: Prop) => {
   const colorScheme = useColorScheme()
   const [isInListForm, setIsInListForm] = useState(false)
   const iconStyle = colorScheme === 'light' ? styles.iconLight : styles.iconDark;
@@ -60,28 +61,28 @@ const VideoTemplate = ({ imageUrl, imageStyle, containerStyle, wrapperStyle,
         </View>
 
         <View style={[styles.wrap, { justifyContent: "space-between" },
-        wrapStyle]}>
+          wrapStyle]}>
           <ThemedView style={[styles.wrapBox, sourceStyle]}>
             <Ionicons style={[styles.icon, iconStyle]} name={sourceIcon} size={24}
             />
             <ThemedText style={styles.text}>{source}</ThemedText>
           </ThemedView>
 
-        {isUserProfile ? "" :  <View style={[styles.wrap, qualityBoxStyle]}>
+          {isUserProfile ? "" : <View style={[styles.wrap, qualityBoxStyle]}>
             <ThemedText style={styles.text}>{quality} </ThemedText>
             <ThemedText style={styles.text}>{data} </ThemedText>
           </View>}
-          
-          {isUserProfile ? 
-          <View style={styles.wrapData}>
-          <ThemedText style={styles.text}>{data} </ThemedText>
-          <Button component={<FontAwesome6 name="ellipsis-vertical"
-            style={iconStyle} size={20} color="black"
-          />} /> 
-          </View>
-          : <Button component={<FontAwesome6 name="ellipsis-vertical"
-            style={iconStyle} size={20} color="black"
-          />} /> }
+
+          {isUserProfile ?
+            <View style={styles.wrapData}>
+              <ThemedText style={styles.text}>{data} </ThemedText>
+              <Button disabled={false} component={<FontAwesome6 name="ellipsis-vertical"
+                style={iconStyle} size={20} color="black"
+              />} />
+            </View>
+            : <Button disabled={false} component={<FontAwesome6 name="ellipsis-vertical"
+              style={iconStyle} size={20} color="black"
+            />} />}
         </View>
       </View>
 

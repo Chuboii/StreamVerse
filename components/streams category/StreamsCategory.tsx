@@ -10,33 +10,33 @@ import { useColorScheme } from "@/hooks/useColorScheme";
 import { Colors } from "@/constants/Colors";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
-import React from 'react'
+import React, { FC } from 'react'
 
 type Prop = {
   containerStyle: object;
-  textStyle:object;
-  text:string;
+  textStyle: object;
+  text: string;
 }
-const StreamsCategory = ({text, containerStyle, textStyle}) : Prop => {
-  
+const StreamsCategory: FC<Prop> = ({ text = "", containerStyle = {}, textStyle = {} }) => {
+
   return (
     <ThemedView style={[styles.container, containerStyle]}>
-    <ThemedText style={[styles.text, textStyle]}> Trending </ThemedText>
+      <ThemedText style={[styles.text, textStyle]}> Trending </ThemedText>
     </ThemedView>
-    )
+  )
 }
 
 export default StreamsCategory
 
 const styles = StyleSheet.create({
-  container:{
-    marginRight:10,
-    padding:15,
-    borderRadius:7,
-    paddingVertical:8
+  container: {
+    marginRight: 10,
+    padding: 15,
+    borderRadius: 7,
+    paddingVertical: 8
   },
-  text:{
-    fontFamily:"KanitRegular",
-    fontSize:14
+  text: {
+    fontFamily: "KanitRegular",
+    fontSize: 14
   }
 })

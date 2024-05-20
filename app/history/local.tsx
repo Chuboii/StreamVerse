@@ -1,14 +1,14 @@
-import { StyleSheet,BackHandler,TextInput, Text, View } from 'react-native'
-import React, {useEffect, useState} from 'react'
+import { StyleSheet, BackHandler, TextInput, Text, View } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { Colors } from '@/constants/Colors';
-import { SafeAreaView} from "react-native-safe-area-context"
+import { SafeAreaView } from "react-native-safe-area-context"
 import { ThemedText } from "@/components/ThemedText"
-import { ThemedView} from "@/components/ThemedView"
+import { ThemedView } from "@/components/ThemedView"
 import VideoTemplate from "@/components/video template/VideoTemplate"
 import { AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
 import Button from "@/components/button template/Button"
-import {router, usePathname} from "expo-router"
+import { router, usePathname } from "expo-router"
 import ReelsTemplate from "@/components/reels template/ReelsTemplate"
 import { Octicons } from '@expo/vector-icons';
 const LocalHistory = () => {
@@ -18,64 +18,64 @@ const LocalHistory = () => {
   const pathname = usePathname()
   const [isNavigated, setIsNavigated] = useState(false)
 
-  
-  
+
+
   const navigateBack = () => router.push("/")
-  
-    
-  const navigateToLocalHistory = () =>{
-   setIsNavigated(true)
+
+
+  const navigateToLocalHistory = () => {
+    setIsNavigated(true)
     router.navigate("/history/local")
   }
-  
+
   const navigateToOnlineHistory = () => {
-   setIsNavigated(true)
-   router.navigate("/history")
+    setIsNavigated(true)
+    router.navigate("/history")
   }
 
 
   return (
     <View>
-       <View style={styles.header}>
-        <Button  onClick={navigateBack} component={<AntDesign name="arrowleft" size={24}
+      <View style={styles.header}>
+        <Button disabled={false} onClick={navigateBack} component={<AntDesign name="arrowleft" size={24}
           style={[styles.icon, colorStyle]} />} />
-    <ThemedText style={styles.title}> History </ThemedText>
-<Octicons name="multi-select" size={24} color="white" />
+        <ThemedText style={styles.title}> History </ThemedText>
+        <Octicons name="multi-select" size={24} color="white" />
       </View>
-      
-      <ThemedView style={styles.btnWrapper}>
-      <Button  onClick={navigateToOnlineHistory} style={pathname === "/history" ? styles.btnStyleActive :
-     styles.btnStyle} component={<ThemedText
-      style={styles.btnText}> Online</ThemedText>}/>
-     <Button disabled={isNavigated} onClick={navigateToLocalHistory} style={pathname === "/history/local" ? styles.btnStyleActive :
-     styles.btnStyle} component={<ThemedText
-     style={styles.btnText}> Local</ThemedText>}/>
-      </ThemedView>
-      
-      
-      
-      <View>   
-    <VideoTemplate sourceIcon="camera-outline"
-    title="Bro didnt see that coming at all"
-   containerStyle={styles.containerStyle}
-  lengthOfVideo="0:01"
-wrapStyle={styles.hideDisplay}
-floatStyle={styles.hideDisplay}
-  titleStyle={styles.titleStyle}
-    />
 
-     <VideoTemplate sourceIcon="camera-outline"
-    title="Bro didnt see that coming at all"
-   containerStyle={styles.containerStyle}
-  lengthOfVideo="0:01"
-wrapStyle={styles.hideDisplay}
-floatStyle={styles.hideDisplay}
-  titleStyle={styles.titleStyle}
-    />
-  
-      
+      <ThemedView style={styles.btnWrapper}>
+        <Button disabled={false} onClick={navigateToOnlineHistory} style={pathname === "/history" ? styles.btnStyleActive :
+          styles.btnStyle} component={<ThemedText
+            style={styles.btnText}> Online</ThemedText>} />
+        <Button disabled={isNavigated} onClick={navigateToLocalHistory} style={pathname === "/history/local" ? styles.btnStyleActive :
+          styles.btnStyle} component={<ThemedText
+            style={styles.btnText}> Local</ThemedText>} />
+      </ThemedView>
+
+
+
+      <View>
+        <VideoTemplate sourceIcon="camera-outline"
+          title="Bro didnt see that coming at all"
+          containerStyle={styles.containerStyle}
+          lengthOfVideo="0:01"
+          wrapStyle={styles.hideDisplay}
+          floatStyle={styles.hideDisplay}
+          titleStyle={styles.titleStyle}
+        />
+
+        <VideoTemplate sourceIcon="camera-outline"
+          title="Bro didnt see that coming at all"
+          containerStyle={styles.containerStyle}
+          lengthOfVideo="0:01"
+          wrapStyle={styles.hideDisplay}
+          floatStyle={styles.hideDisplay}
+          titleStyle={styles.titleStyle}
+        />
+
+
       </View>
-      
+
     </View>
   )
 }
@@ -109,53 +109,53 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingVertical: 10
   },
-  header:{
+  header: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent:"space-between",
-    padding:10,
-    paddingVertical:15
+    justifyContent: "space-between",
+    padding: 10,
+    paddingVertical: 15
   },
   title: {
     fontFamily: "KanitBold",
     fontSize: 20,
-    
+
   },
-  hideDisplay:{
-    display:"none"
+  hideDisplay: {
+    display: "none"
   },
-  titleStyle:{
-    fontSize:16,
-    fontFamily:"KanitRegular"
+  titleStyle: {
+    fontSize: 16,
+    fontFamily: "KanitRegular"
   },
-  containerStyle:{
-    alignItems:"center",
-    
+  containerStyle: {
+    alignItems: "center",
+
   },
-  btnWrapper:{
-    flexDirection:"row",
-    paddingVertical:5,
-    marginHorizontal:10,
-    borderRadius:20,
-    marginTop:20
+  btnWrapper: {
+    flexDirection: "row",
+    paddingVertical: 5,
+    marginHorizontal: 10,
+    borderRadius: 20,
+    marginTop: 20
   },
-  btnStyle:{
-    justifyContent:"center",
-    flex:1,
-    borderRadius:10,
-    marginHorizontal:7,
-    paddingVertical:13,
-    backgroundColor:"transparent"
+  btnStyle: {
+    justifyContent: "center",
+    flex: 1,
+    borderRadius: 10,
+    marginHorizontal: 7,
+    paddingVertical: 13,
+    backgroundColor: "transparent"
   },
-  btnStyleActive:{
-    backgroundColor:"rgba(255,255,255,.3)",
-    flex:1,
-    borderRadius:10,
-    marginHorizontal:7,
-    paddingVertical:13
+  btnStyleActive: {
+    backgroundColor: "rgba(255,255,255,.3)",
+    flex: 1,
+    borderRadius: 10,
+    marginHorizontal: 7,
+    paddingVertical: 13
   },
-  btnText:{
-    textAlign:"center",
-    fontFamily:"KanitRegular"
+  btnText: {
+    textAlign: "center",
+    fontFamily: "KanitRegular"
   }
 })

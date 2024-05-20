@@ -24,8 +24,8 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
 import { usePathname } from "expo-router"
 import { AntDesign } from '@expo/vector-icons';
-import {useCallback} from "react"
-import {router} from "expo-router"
+import { useCallback } from "react"
+import { router } from "expo-router"
 
 
 const { Navigator } = createMaterialTopTabNavigator();
@@ -45,59 +45,59 @@ export default function Layout() {
   const colorScheme = useColorScheme()
   const route = usePathname()
   const colorStyle = colorScheme === 'light' ? styles.iconLight :
-  styles.iconDark;
+    styles.iconDark;
   const bgStyle = colorScheme === 'light' ? styles.bgLight : styles.bgDark;
 
-const navigateToSearchScreen = useCallback(() => {
+  const navigateToSearchScreen = useCallback(() => {
     router.push("/search")
-  },[])
-  
+  }, [])
+
 
   return (
     <>
       <SafeAreaView style={[styles.container, bgStyle]}>
-      <View style={styles.headWrap}>
-       <Button
-          component={
-            <AntDesign
-              name="arrowleft"
-              size={27}
-              style={[styles.headerIcon, colorStyle]}
-            />
-          }
-        />
-       <Button
-          component={
-            <AntDesign
-              name="setting"
-              size={27}
-              style={[styles.headerIcon, colorStyle]}
-            />
-          }
-        />
-</View>
-<View style={styles.wrapper}>
-<View style={styles.imageBox}>
-<Image style={styles.image} source={require("../../../assets/images/dummy.jpeg")}/>
-</View>
+        <View style={styles.headWrap}>
+          <Button
+            component={
+              <AntDesign
+                name="arrowleft"
+                size={27}
+                style={[styles.headerIcon, colorStyle]}
+              />
+            }
+          />
+          <Button
+            component={
+              <AntDesign
+                name="setting"
+                size={27}
+                style={[styles.headerIcon, colorStyle]}
+              />
+            }
+          />
+        </View>
+        <View style={styles.wrapper}>
+          <View style={styles.imageBox}>
+            <Image style={styles.image} source={require("../../../assets/images/dummy.jpeg")} />
+          </View>
 
-<View style={styles.box}>
-<ThemedText style={[styles.text, styles.name]}> Joe Doe </ThemedText>
-<View style={styles.wrap}>
-<ThemedText style={[styles.text, styles.text1]}> 100 following </ThemedText>
-<ThemedText style={[styles.text, styles.text1]}> 100 followers </ThemedText>
-</View>
+          <View style={styles.box}>
+            <ThemedText style={[styles.text, styles.name]}> Joe Doe </ThemedText>
+            <View style={styles.wrap}>
+              <ThemedText style={[styles.text, styles.text1]}> 100 following </ThemedText>
+              <ThemedText style={[styles.text, styles.text1]}> 100 followers </ThemedText>
+            </View>
 
-<View style={[styles.wrap, styles.btn]}>
-<Button style={styles.btnWrap} component={<ThemedText style={styles.btnText}> Edit Profile </ThemedText>}/>
-<Button style={styles.btnWrap} component={<ThemedText style={styles.btnText}> Share Profile </ThemedText>}/>
-</View>
-  
-</View>
-</View>
-<ThemedText style={styles.bio}> This is my bio </ThemedText>
+            <View style={[styles.wrap, styles.btn]}>
+              <Button style={styles.btnWrap} component={<ThemedText style={styles.btnText}> Edit Profile </ThemedText>} />
+              <Button style={styles.btnWrap} component={<ThemedText style={styles.btnText}> Share Profile </ThemedText>} />
+            </View>
+
+          </View>
+        </View>
+        <ThemedText style={styles.bio}> This is my bio </ThemedText>
       </SafeAreaView>
-  
+
       <MaterialTopTab
         screenOptions={({ route }) => ({
           tabBarLabel: ({ focused, color }) => {
@@ -114,7 +114,7 @@ const navigateToSearchScreen = useCallback(() => {
           initialLayout: {
             width: Dimensions.get('window').width
           },
-         // tabBarItemStyle: { width: 90 },
+          // tabBarItemStyle: { width: 90 },
           tabBarStyle: {
             backgroundColor: Colors[colorScheme ?? "light"].transparent,
             width: "100%"
@@ -135,7 +135,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 5,
     paddingVertical: -10,
     paddingBottom: 30,
-    paddingTop:10,
+    paddingTop: 10,
   },
   iconBox: {
     position: "absolute",
@@ -158,60 +158,63 @@ const styles = StyleSheet.create({
   bgLight: {
     backgroundColor: Colors.light.transparent
   },
-  wrapper:{
-    flexDirection:"row",
-    alignItems:"center",
-    padding:10,
-    marginBottom:15
+  wrapper: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 10,
+    marginBottom: 15
   },
-  imageBox:{
-    width:110,
-    height:110,
-    marginRight:20
+  imageBox: {
+    width: 110,
+    height: 110,
+    marginRight: 20
   },
-  image:{
-    width:"100%",
-    height:"100%",
-    borderRadius:50
+  image: {
+    width: "100%",
+    height: "100%",
+    borderRadius: 50
   },
-  wrap:{
-    flexDirection:"row"
+  wrap: {
+    flexDirection: "row"
   },
-  box:{
-    
+  box: {
+
   },
-  bio:{
-    textAlign:"center",
-    fontFamily:"KanitRegular",
-    justifyContent:"center",
-    flexDirection:"row",
-    marginVertical:15
+  bio: {
+    textAlign: "center",
+    fontFamily: "KanitRegular",
+    justifyContent: "center",
+    flexDirection: "row",
+    marginVertical: 15
   },
-  text:{
-    fontFamily:"KanitRegular",
-    marginVertical:3,
-    marginRight:10,
-    textTransform:"capitalize"
-    
+  text: {
+    fontFamily: "KanitRegular",
+    marginVertical: 3,
+    marginRight: 10,
+    textTransform: "capitalize"
+
   },
-  btnText:{
-    fontFamily:"KanitRegular"
+  btnText: {
+    fontFamily: "KanitRegular"
   },
-  btn:{
-    marginVertical:10
+  btn: {
+    marginVertical: 10
   },
-  btnWrap:{
-    padding:10,
-    borderRadius:10,
-    backgroundColor:"rgba(255,255,255,.1)",
-    marginRight:10
+  btnWrap: {
+    padding: 10,
+    borderRadius: 10,
+    backgroundColor: "rgba(255,255,255,.1)",
+    marginRight: 10
   },
-  headWrap:{
-    flexDirection:"row",
-    justifyContent:"space-between",
-    marginBottom:20
+  headWrap: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 20
   },
-  name:{
-    fontSize:20
+  name: {
+    fontSize: 20
+  },
+  headerIcon: {
+
   }
 })

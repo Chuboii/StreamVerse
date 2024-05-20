@@ -1,4 +1,4 @@
-import { StyleSheet,FlatList, ScrollView, Text, View, Image, Dimensions } from 'react-native'
+import { StyleSheet, FlatList, ScrollView, Text, View, Image, Dimensions } from 'react-native'
 
 import VideoTemplate from "@/components/video template/VideoTemplate";
 import { AntDesign, MaterialCommunityIcons } from "@expo/vector-icons";
@@ -19,98 +19,104 @@ const Reels = () => {
   const colorStyle =
     colorScheme === "light" ? styles.colorLight : styles.colorDark;
   const navigateBack = () => router.back();
-  
+
   return (
     <View style={styles.box}>
-<View style={styles.wrapper}>
-<ReelsTemplate
-titleStyle={styles.titleStyle}
-imageStyle={styles.imageStyle}
-containerStyle={styles.containerStyle}
-textStyle={styles.textStyle}
-iconStyle={styles.iconStyle}
-wrapStyle={styles.wrapStyle}
-/>
-<ReelsTemplate
-titleStyle={styles.titleStyle}
-imageStyle={styles.imageStyle}
-containerStyle={styles.containerStyle}
-textStyle={styles.textStyle}
-iconStyle={styles.iconStyle}
-wrapStyle={styles.wrapStyle}
-/>
-<ReelsTemplate
-titleStyle={styles.titleStyle}
-imageStyle={styles.imageStyle}
-containerStyle={styles.containerStyle}
-textStyle={styles.textStyle}
-iconStyle={styles.iconStyle}
-wrapStyle={styles.wrapStyle}
-/>
-</View>
-<View style={styles.wrapper}>
-<ReelsTemplate
-titleStyle={styles.titleStyle}
-imageStyle={styles.imageStyle}
-containerStyle={styles.containerStyle}
-textStyle={styles.textStyle}
-iconStyle={styles.iconStyle}
-wrapStyle={styles.wrapStyle}
-/>
-<ReelsTemplate
-titleStyle={styles.titleStyle}
-imageStyle={styles.imageStyle}
-containerStyle={styles.containerStyle}
-textStyle={styles.textStyle}
-iconStyle={styles.iconStyle}
-wrapStyle={styles.wrapStyle}
-/>
-<ReelsTemplate
-titleStyle={styles.titleStyle}
-imageStyle={styles.imageStyle}
-containerStyle={styles.containerStyle}
-textStyle={styles.textStyle}
-iconStyle={styles.iconStyle}
-wrapStyle={styles.wrapStyle}
-/>
-</View>
-</View>
+      <View style={styles.wrapper}>
+        <ReelsTemplate
+          titleStyle={styles.titleStyle}
+          imageStyle={styles.imageStyle}
+          containerStyle={styles.containerStyle}
+          textStyle={styles.textStyle}
+          iconStyle={styles.iconStyle}
+          wrapStyle={styles.wrapStyle}
+        />
+        <ReelsTemplate
+          titleStyle={styles.titleStyle}
+          imageStyle={styles.imageStyle}
+          containerStyle={styles.containerStyle}
+          textStyle={styles.textStyle}
+          iconStyle={styles.iconStyle}
+          wrapStyle={styles.wrapStyle}
+        />
+        <ReelsTemplate
+          titleStyle={styles.titleStyle}
+          imageStyle={styles.imageStyle}
+          containerStyle={styles.containerStyle}
+          textStyle={styles.textStyle}
+          iconStyle={styles.iconStyle}
+          wrapStyle={styles.wrapStyle}
+        />
+      </View>
+      <View style={styles.wrapper}>
+        <ReelsTemplate
+          titleStyle={styles.titleStyle}
+          imageStyle={styles.imageStyle}
+          containerStyle={styles.containerStyle}
+          textStyle={styles.textStyle}
+          iconStyle={styles.iconStyle}
+          wrapStyle={styles.wrapStyle}
+        />
+        <ReelsTemplate
+          titleStyle={styles.titleStyle}
+          imageStyle={styles.imageStyle}
+          containerStyle={styles.containerStyle}
+          textStyle={styles.textStyle}
+          iconStyle={styles.iconStyle}
+          wrapStyle={styles.wrapStyle}
+        />
+        <ReelsTemplate
+          titleStyle={styles.titleStyle}
+          imageStyle={styles.imageStyle}
+          containerStyle={styles.containerStyle}
+          textStyle={styles.textStyle}
+          iconStyle={styles.iconStyle}
+          wrapStyle={styles.wrapStyle}
+        />
+      </View>
+    </View>
   )
 }
 
 export default Reels
 
 const styles = StyleSheet.create({
-  wrapper:{
-    flexDirection:"row",
-    alignItems:"center"
+  wrapper: {
+    flexDirection: "row",
+    alignItems: "center"
   },
-  titleStyle:{
-    display:"none"
+  titleStyle: {
+    display: "none"
   },
-  imageStyle:{
+  imageStyle: {
     width: screenWidth / 3,
-    height:180,
-    padding:10,
-    paddingHorizontal:5
+    height: 180,
+    padding: 10,
+    paddingHorizontal: 5
   },
-  box:{
-    
+  box: {
+
   },
-  containerStyle:{
-    margin:0,
-    padding:0,
-    width:screenWidth / 3
+  containerStyle: {
+    margin: 0,
+    padding: 0,
+    width: screenWidth / 3
   },
-  textStyle:{
-    fontSize:12,
-    textTransform:"lowercase"
+  textStyle: {
+    fontSize: 12,
+    textTransform: "lowercase"
   },
-  wrapStyle:{
-    marginHorizontal:5,
-    marginVertical:6
+  wrapStyle: {
+    marginHorizontal: 5,
+    marginVertical: 6
   },
-  iconStyle:{
-    fontSize:11
-  }
+  iconStyle: {
+    fontSize: 11
+  },
+  colorLight: {
+    color: Colors.light.tint,
+  },
+  colorDark: {
+    color: Colors.dark.tint,
+  },
 })
