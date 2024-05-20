@@ -24,8 +24,8 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
 import { usePathname } from "expo-router"
 import { AntDesign } from '@expo/vector-icons';
-import {useCallback} from "react"
-import {router} from "expo-router"
+import { useCallback } from "react"
+import { router } from "expo-router"
 
 
 const { Navigator } = createMaterialTopTabNavigator();
@@ -45,37 +45,37 @@ export default function Layout() {
   const colorScheme = useColorScheme()
   const route = usePathname()
   const colorStyle = colorScheme === 'light' ? styles.iconLight :
-  styles.iconDark;
+    styles.iconDark;
   const bgStyle = colorScheme === 'light' ? styles.bgLight : styles.bgDark;
 
-const navigateToSearchScreen = useCallback(() => {
+  const navigateToSearchScreen = useCallback(() => {
     router.push("/search")
-  },[])
-  
+  }, [])
+
 
   return (
     <>
       <SafeAreaView style={[styles.container, bgStyle]}>
 
-        <PageHeaderTemplate isPageHeader={true}/>
+        <PageHeaderTemplate isPageHeader={true} />
       </SafeAreaView>
-      
-         <SafeAreaView>
-      <Button onClick={navigateToSearchScreen} component={
-   <ThemedView style={styles.inputWrapper}>
-   <AntDesign style={[styles.inputIcon, colorStyle]} name="search1"  size={24} color="black" />
-   </ThemedView>}/>
-</SafeAreaView>
+
+      <SafeAreaView>
+        <Button disabled={false} onClick={navigateToSearchScreen} component={
+          <ThemedView style={styles.inputWrapper}>
+            <AntDesign style={[styles.inputIcon, colorStyle]} name="search1" size={24} color="black" />
+          </ThemedView>} />
+      </SafeAreaView>
       <SafeAreaView style={styles.iconBox}>
 
         {
           route === "/" || route === "/folders" ?
-            <Button component={<MaterialCommunityIcons name="format-list-text"
+            <Button disabled={false} component={<MaterialCommunityIcons name="format-list-text"
               color="white" style={[styles.icon, colorStyle]} />} />
-            : <Button component={<AntDesign name="plussquareo" size={24}
+            : <Button disabled={false} component={<AntDesign name="plussquareo" size={24}
               style={[styles.icon, colorStyle]} />} />}
       </SafeAreaView>
-   
+
 
 
       <MaterialTopTab
@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 5,
     paddingVertical: -10,
     paddingBottom: 30,
-    paddingTop:10,
+    paddingTop: 10,
   },
   iconBox: {
     position: "absolute",
@@ -138,20 +138,20 @@ const styles = StyleSheet.create({
   bgLight: {
     backgroundColor: Colors.light.transparent
   },
-  inputWrapper:{
-    flexDirection:"row",
-    alignItems:"center",
-    justifyContent:"flex-start",
-    marginHorizontal:20,
-    padding:10,
-    borderRadius:30,
-    paddingHorizontal:20,
-    marginBottom:15
+  inputWrapper: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "flex-start",
+    marginHorizontal: 20,
+    padding: 10,
+    borderRadius: 30,
+    paddingHorizontal: 20,
+    marginBottom: 15
   },
-  inputIcon:{
+  inputIcon: {
 
-    borderRadius:7,
-    fontSize:25,
-    
+    borderRadius: 7,
+    fontSize: 25,
+
   }
 })
