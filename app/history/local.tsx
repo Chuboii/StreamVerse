@@ -1,8 +1,8 @@
 import { StyleSheet,BackHandler,TextInput, Text, View } from 'react-native'
-import React, {useEffect,useCallback, useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { Colors } from '@/constants/Colors';
-import { SafeAreaView } from "react-native-safe-area-context"
+import { SafeAreaView} from "react-native-safe-area-context"
 import { ThemedText } from "@/components/ThemedText"
 import { ThemedView} from "@/components/ThemedView"
 import VideoTemplate from "@/components/video template/VideoTemplate"
@@ -11,57 +11,48 @@ import Button from "@/components/button template/Button"
 import {router, usePathname} from "expo-router"
 import ReelsTemplate from "@/components/reels template/ReelsTemplate"
 import { Octicons } from '@expo/vector-icons';
-const History = () => {
+const LocalHistory = () => {
   const colorScheme = useColorScheme()
   const colorStyle = colorScheme === 'light' ? styles.colorLight : styles.colorDark;
   const bgStyle = colorScheme === 'light' ? styles.bgLight : styles.bgLight;
   const pathname = usePathname()
   const [isNavigated, setIsNavigated] = useState(false)
+
+  
   
   const navigateBack = () => router.push("/")
- 
+  
+    
+  const navigateToLocalHistory = () =>{
+   setIsNavigated(true)
+    router.navigate("/history/local")
+  }
+  
   const navigateToOnlineHistory = () => {
    setIsNavigated(true)
    router.navigate("/history")
   }
-  
-  const navigateToLocalHistory = () =>{
-   setIsNavigated(true)
-    router.push("/history/local")
-  }
-  console.log(isNavigated)
+
 
   return (
     <View>
        <View style={styles.header}>
-        <Button onClick={navigateBack} component={<AntDesign name="arrowleft" size={24}
+        <Button  onClick={navigateBack} component={<AntDesign name="arrowleft" size={24}
           style={[styles.icon, colorStyle]} />} />
     <ThemedText style={styles.title}> History </ThemedText>
 <Octicons name="multi-select" size={24} color="white" />
       </View>
       
       <ThemedView style={styles.btnWrapper}>
-      <Button disabled={isNavigated} onClick={navigateToOnlineHistory} style={pathname === "/history" ? styles.btnStyleActive :
+      <Button  onClick={navigateToOnlineHistory} style={pathname === "/history" ? styles.btnStyleActive :
      styles.btnStyle} component={<ThemedText
       style={styles.btnText}> Online</ThemedText>}/>
-     <Button onClick={navigateToLocalHistory} style={pathname === "/local" ? styles.btnStyleActive :
+     <Button disabled={isNavigated} onClick={navigateToLocalHistory} style={pathname === "/history/local" ? styles.btnStyleActive :
      styles.btnStyle} component={<ThemedText
      style={styles.btnText}> Local</ThemedText>}/>
       </ThemedView>
       
       
-      <View style={styles.wrapper}>
-      <ReelsTemplate 
-      imageStyle={styles.reelImageStyle}
-      titleStyle={styles.reelTitleStyle}
-      containerStyle={styles.reelContainerStyle}
-      />
-      <ReelsTemplate 
-      imageStyle={styles.reelImageStyle}
-      titleStyle={styles.reelTitleStyle}
-      containerStyle={styles.reelContainerStyle}
-      />
-      </View>
       
       <View>   
     <VideoTemplate sourceIcon="camera-outline"
@@ -81,19 +72,7 @@ wrapStyle={styles.hideDisplay}
 floatStyle={styles.hideDisplay}
   titleStyle={styles.titleStyle}
     />
-    
-          <View style={styles.wrapper}>
-      <ReelsTemplate 
-      imageStyle={styles.reelImageStyle}
-      titleStyle={styles.reelTitleStyle}
-      containerStyle={styles.reelContainerStyle}
-      />
-      <ReelsTemplate 
-      imageStyle={styles.reelImageStyle}
-      titleStyle={styles.reelTitleStyle}
-      containerStyle={styles.reelContainerStyle}
-      />
-      </View>
+  
       
       </View>
       
@@ -101,7 +80,7 @@ floatStyle={styles.hideDisplay}
   )
 }
 
-export default History
+export default LocalHistory
 
 const styles = StyleSheet.create({
   icon: {
@@ -153,21 +132,11 @@ const styles = StyleSheet.create({
     alignItems:"center",
     
   },
-  reelContainerStyle:{
-    width:120
-  },
-  reelImageStyle:{
-  height:170,
-    width:120  
-  },
-  reelTitleStyle:{
-    fontSize:12
-  },
   btnWrapper:{
     flexDirection:"row",
     paddingVertical:5,
     marginHorizontal:10,
-    borderRadius:10,
+    borderRadius:20,
     marginTop:20
   },
   btnStyle:{

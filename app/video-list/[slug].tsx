@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
     color: Colors.light.tint,
   },
   colorDark: {
-    color: Colors.light.tint,
+    color: Colors.dark.tint,
   },
   cStyles: {
     height: 120,

@@ -7,13 +7,15 @@ type Props = {
 };
 
 
-const Button: FC<Props> = ({ onClick, style, component }) => {
+const Button: FC<Props> = ({ onClick, style, component, disabled }) => {
 
 
   return (
-    <TouchableOpacity onPress={onClick}>
+    <>
+    <TouchableOpacity style={style} onPress={onClick} disabled={disabled}>
       {component}
     </TouchableOpacity>
+    </>
   )
 }
 

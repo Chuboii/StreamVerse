@@ -9,25 +9,25 @@ exports.styles = react_native_1.StyleSheet.create({
         padding: 10,
         flexDirection: "row",
         height: 120,
-        marginVertical: 5
+        marginVertical: 5,
     },
     wrapper: {
         marginLeft: 15,
         justifyContent: "space-between",
         width: "60%",
-        paddingRight: 10
+        paddingRight: 10,
     },
     wrap: {
         flexDirection: "row",
-        alignItems: "center"
+        alignItems: "center",
     },
     imageBox: {
-        width: "40%"
+        width: "40%",
     },
     img: {
         width: "100%",
         height: "100%",
-        borderRadius: 10
+        borderRadius: 10,
     },
     mins: {
         backgroundColor: "rgba(0,0,0,.4)",
@@ -36,13 +36,13 @@ exports.styles = react_native_1.StyleSheet.create({
         bottom: 5,
         color: "white",
         padding: 5,
-        borderRadius: 5
+        borderRadius: 5,
     },
     text: {
         fontFamily: "KanitRegular",
         fontSize: 14,
         color: "gray",
-        marginRight: 5
+        marginRight: 5,
     },
     float: {
         position: "absolute",
@@ -59,14 +59,25 @@ exports.styles = react_native_1.StyleSheet.create({
         width: screenWidth - 200,
         fontFamily: "ExoRegular",
     },
-    icon: function (colorScheme) { return ({
-        color: Colors_1.Colors[colorScheme !== null && colorScheme !== void 0 ? colorScheme : "light"].tint,
-        marginRight: 10,
-        fontSize: 18
-    }); },
+    iconLight: {
+        color: Colors_1.Colors.light.tint
+    },
+    iconDark: {
+        color: Colors_1.Colors.dark.tint
+    },
+    icon: {
+        fontSize: 15,
+        marginRight: 10
+    },
     wrapBox: {
         flexDirection: "row",
         padding: 7,
-        borderRadius: 5
+        borderRadius: 5,
+        alignItems: "center"
+    },
+    wrapData: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+        flex: 1
     }
 });

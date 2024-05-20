@@ -8,6 +8,7 @@ import { AntDesign } from '@expo/vector-icons';
 import VideoFolder from "@/components/video folder/VideoFolder"
 import Button from "@/components/button template/Button"
 import { router } from "expo-router"
+import { SafeAreaView } from "react-native-safe-area-context"
 
 const VideoFoldersList = () => {
   const [videoFolders, setVideoFolders] = useState([]);
@@ -46,7 +47,7 @@ const VideoFoldersList = () => {
     })
   }
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <View style={styles.wrap}>
         <Button onClick={navigateToFolderContents} component={<VideoFolder />} />
         <Button component={<VideoFolder />} />
@@ -67,7 +68,7 @@ const VideoFoldersList = () => {
         <Button component={<VideoFolder />} />
         <Button component={<VideoFolder />} />
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -75,7 +76,7 @@ const styles = StyleSheet.create({
   container: {
     alignItems: "center",
     justifyContent: "center",
-    paddingVertical: 15
+    paddingVertical: 10
   },
   wrap: {
     flexDirection: "row"

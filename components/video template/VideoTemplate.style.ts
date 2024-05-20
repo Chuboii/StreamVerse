@@ -62,11 +62,21 @@ export const styles = StyleSheet.create({
     color: Colors.light.tint
   },
   iconDark: {
-    color: Colors.light.tint
+    color: Colors.dark.tint
+  },
+  icon:{
+    fontSize:15,
+    marginRight:10
   },
   wrapBox: {
     flexDirection: "row",
     padding: 7,
     borderRadius: 5,
+    alignItems:"center"
   },
+  wrapData:{
+    flexDirection:"row",
+    justifyContent:"space-between",
+    flex:1
+  }
 });

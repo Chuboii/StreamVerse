@@ -4,43 +4,43 @@ exports.styles = void 0;
 var react_native_1 = require("react-native");
 var Colors_1 = require("@/constants/Colors");
 exports.styles = react_native_1.StyleSheet.create({
-    container: function (colorScheme) { return ({
+    container: {
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "space-between",
         padding: 0,
-        backgroundColor: Colors_1.Colors[colorScheme !== null && colorScheme !== void 0 ? colorScheme : "light"].transparent
-    }); },
-    wrap: function (colorScheme) { return ({
+    },
+    bgDark: {
+        backgroundColor: Colors_1.Colors.dark.transparent,
+    },
+    bgLight: {
+        backgroundColor: Colors_1.Colors.light.transparent,
+    },
+    colorLight: {
+        color: Colors_1.Colors.light.tint,
+    },
+    colorDark: {
+        color: Colors_1.Colors.dark.tint,
+    },
+    wrap: {
         flexDirection: "row",
         alignItems: "center",
-        backgroundColor: Colors_1.Colors[colorScheme !== null && colorScheme !== void 0 ? colorScheme : "light"].gray,
         padding: 15,
         paddingVertical: 10,
-        borderRadius: 15
-    }); },
+        borderRadius: 15,
+    },
     wrapper: {
         flexDirection: "row",
         alignItems: "center",
     },
-    icon: function (colorScheme, margin) { return ({
-        color: Colors_1.Colors[colorScheme !== null && colorScheme !== void 0 ? colorScheme : "light"].tint,
-        fontSize: 20,
-        marginRight: margin
-    }); },
-    selected: function (colorScheme, margin) { return ({
-        backgroundColor: Colors_1.Colors[colorScheme !== null && colorScheme !== void 0 ? colorScheme : "light"].transparent,
-        color: Colors_1.Colors[colorScheme !== null && colorScheme !== void 0 ? colorScheme : "light"].tint,
-        padding: 10,
-        paddingHorizontal: 20,
-        borderRadius: 10,
-        marginRight: margin
-    }); },
+    icon: {
+        fontSize: 20
+    },
     wrapText: {
         flexDirection: "row",
         justifyContent: "space-between",
         width: "100%",
-        paddingVertical: 20
+        paddingVertical: 20,
     },
     text: {
         fontFamily: "ExoRegular",
@@ -49,18 +49,16 @@ exports.styles = react_native_1.StyleSheet.create({
         borderBottomWidth: 1,
         paddingBottom: 5,
         textAlign: "center",
-        width: 70
+        width: 70,
     },
-    logoText: function (colorScheme) { return ({
+    gap: {
+        marginLeft: 20
+    },
+    logoText: {
         fontFamily: "KanitRegular",
         fontSize: 25,
         textAlign: "center",
         marginLeft: 10,
-        color: Colors_1.Colors[colorScheme !== null && colorScheme !== void 0 ? colorScheme : "light"].tint,
-    }); },
-    wrap: {
-        flexDirection: "row",
-        alignItems: "center"
     },
     logoIcon: {
         backgroundColor: "orangered",
@@ -68,6 +66,19 @@ exports.styles = react_native_1.StyleSheet.create({
         height: 40,
         borderRadius: 50,
         justifyContent: "center",
-        alignItems: 'center'
+        alignItems: "center",
+    },
+    iconLight: {
+        color: Colors_1.Colors.light.tint,
+    },
+    iconDark: {
+        color: Colors_1.Colors.light.tint,
+    },
+    profile: {
+        padding: 3,
+        borderRadius: 50,
+        justifyContent: "center",
+        alignItems: "center",
+        fontSize: 19,
     }
 });

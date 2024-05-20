@@ -10,6 +10,7 @@ export default function TabLayout() {
 
   return (
     <Tabs
+    initialRouteName="streams"
       screenOptions={{
         tabBarShowLabel: false,
         tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
@@ -27,7 +28,6 @@ export default function TabLayout() {
       <Tabs.Screen
         name="reels"
         options={{
-
           title: 'Reels',
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon name={focused ? 'videocam' : 'videocam-outline'} color={color} />
@@ -47,6 +47,15 @@ export default function TabLayout() {
           ),
         }}
       />
+   <Tabs.Screen
+        name="streams"
+        options={{
+          title: 'streams',
+          tabBarIcon: ({ color, focused }) => (
+            <TabBarIcon name={focused ? 'tv' : 'tv-outline'} color={color} />
+          ),
+        }}
+      />
       <Tabs.Screen
         name="videoDownloader"
         options={{
@@ -58,15 +67,7 @@ export default function TabLayout() {
         }}
       />
 
-      <Tabs.Screen
-        name="streams"
-        options={{
-          title: 'streams',
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'person-sharp' : 'person-outline'} color={color} />
-          ),
-        }}
-      />
+
 
     </Tabs>
   );

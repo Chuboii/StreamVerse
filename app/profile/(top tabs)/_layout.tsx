@@ -56,28 +56,48 @@ const navigateToSearchScreen = useCallback(() => {
   return (
     <>
       <SafeAreaView style={[styles.container, bgStyle]}>
+      <View style={styles.headWrap}>
+       <Button
+          component={
+            <AntDesign
+              name="arrowleft"
+              size={27}
+              style={[styles.headerIcon, colorStyle]}
+            />
+          }
+        />
+       <Button
+          component={
+            <AntDesign
+              name="setting"
+              size={27}
+              style={[styles.headerIcon, colorStyle]}
+            />
+          }
+        />
+</View>
+<View style={styles.wrapper}>
+<View style={styles.imageBox}>
+<Image style={styles.image} source={require("../../../assets/images/dummy.jpeg")}/>
+</View>
 
-        <PageHeaderTemplate isPageHeader={true}/>
+<View style={styles.box}>
+<ThemedText style={[styles.text, styles.name]}> Joe Doe </ThemedText>
+<View style={styles.wrap}>
+<ThemedText style={[styles.text, styles.text1]}> 100 following </ThemedText>
+<ThemedText style={[styles.text, styles.text1]}> 100 followers </ThemedText>
+</View>
+
+<View style={[styles.wrap, styles.btn]}>
+<Button style={styles.btnWrap} component={<ThemedText style={styles.btnText}> Edit Profile </ThemedText>}/>
+<Button style={styles.btnWrap} component={<ThemedText style={styles.btnText}> Share Profile </ThemedText>}/>
+</View>
+  
+</View>
+</View>
+<ThemedText style={styles.bio}> This is my bio </ThemedText>
       </SafeAreaView>
-      
-         <SafeAreaView>
-      <Button onClick={navigateToSearchScreen} component={
-   <ThemedView style={styles.inputWrapper}>
-   <AntDesign style={[styles.inputIcon, colorStyle]} name="search1"  size={24} color="black" />
-   </ThemedView>}/>
-</SafeAreaView>
-      <SafeAreaView style={styles.iconBox}>
-
-        {
-          route === "/" || route === "/folders" ?
-            <Button component={<MaterialCommunityIcons name="format-list-text"
-              color="white" style={[styles.icon, colorStyle]} />} />
-            : <Button component={<AntDesign name="plussquareo" size={24}
-              style={[styles.icon, colorStyle]} />} />}
-      </SafeAreaView>
-   
-
-
+  
       <MaterialTopTab
         screenOptions={({ route }) => ({
           tabBarLabel: ({ focused, color }) => {
@@ -86,15 +106,15 @@ const navigateToSearchScreen = useCallback(() => {
               labelName = 'VIDEOS';
             } else if (route.name === 'folders') {
               labelName = 'FOLDERS';
-            } else if (route.name === 'playlists') {
-              labelName = 'PLAYLISTS';
+            } else if (route.name === 'reels') {
+              labelName = 'REELS';
             }
             return <Text style={{ color, fontFamily: "KanitRegular", fontSize: 12 }}>{labelName}</Text>;
           },
           initialLayout: {
             width: Dimensions.get('window').width
           },
-          tabBarItemStyle: { width: 90 },
+         // tabBarItemStyle: { width: 90 },
           tabBarStyle: {
             backgroundColor: Colors[colorScheme ?? "light"].transparent,
             width: "100%"
@@ -138,20 +158,60 @@ const styles = StyleSheet.create({
   bgLight: {
     backgroundColor: Colors.light.transparent
   },
-  inputWrapper:{
+  wrapper:{
     flexDirection:"row",
     alignItems:"center",
-    justifyContent:"flex-start",
-    marginHorizontal:20,
     padding:10,
-    borderRadius:30,
-    paddingHorizontal:20,
     marginBottom:15
   },
-  inputIcon:{
-
-    borderRadius:7,
-    fontSize:25,
+  imageBox:{
+    width:110,
+    height:110,
+    marginRight:20
+  },
+  image:{
+    width:"100%",
+    height:"100%",
+    borderRadius:50
+  },
+  wrap:{
+    flexDirection:"row"
+  },
+  box:{
     
+  },
+  bio:{
+    textAlign:"center",
+    fontFamily:"KanitRegular",
+    justifyContent:"center",
+    flexDirection:"row",
+    marginVertical:15
+  },
+  text:{
+    fontFamily:"KanitRegular",
+    marginVertical:3,
+    marginRight:10,
+    textTransform:"capitalize"
+    
+  },
+  btnText:{
+    fontFamily:"KanitRegular"
+  },
+  btn:{
+    marginVertical:10
+  },
+  btnWrap:{
+    padding:10,
+    borderRadius:10,
+    backgroundColor:"rgba(255,255,255,.1)",
+    marginRight:10
+  },
+  headWrap:{
+    flexDirection:"row",
+    justifyContent:"space-between",
+    marginBottom:20
+  },
+  name:{
+    fontSize:20
   }
 })

@@ -6,7 +6,7 @@ import { Link } from 'expo-router';
 import { View, StyleProp, Text, ViewStyle } from "react-native"
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { Colors } from '@/constants/Colors';
-import { FC, ReactNode, useState } from "react"
+import { FC, ReactNode, useState, useCallback} from "react"
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { AntDesign } from '@expo/vector-icons';
 import { Octicons } from '@expo/vector-icons';
@@ -25,15 +25,22 @@ const PageHeaderTemplate: FC<Props> = ({ style, isPageHeader }) => {
 
   const colorScheme = useColorScheme()
   const [isActive, setIsActive] = useState(false)
-  const colorStyle = colorScheme === 'light' ? styles.iconLight : styles.iconDark;
+  const colorStyle = colorScheme === 'light' ? styles.colorLight : styles.colorDark;
   const bgStyle = colorScheme === 'light' ? styles.bgLight : styles.bgDark;
 
 
-  const navigateToSearchScreen = () => {
-    router.push("/search")
-  }
-
-
+  const navigateToMenuScreen = useCallback(() => {
+    router.navigate("/menu")
+  },[])
+  
+  const navigateToHistoryScreen = useCallback(() => {
+    router.push("/history")
+  },[])
+   
+   const navigateToDownloadScreen = useCallback(() => {
+    router.push("/downloads")
+  },[])
+   
 
   return (
     <SafeAreaView style={[styles.container, bgStyle, style]}>
@@ -45,7 +52,8 @@ const PageHeaderTemplate: FC<Props> = ({ style, isPageHeader }) => {
             <FontAwesome5 name="play" size={18} color="white"
               style={[styles.icon]} />
           </View>
-          <ThemedText lightColor='black' darkColor='white' style={styles.logoText}>StreamTube </ThemedText>
+          <Text
+          style={[styles.logoText, colorStyle]}>StreamTube </Text>
         </View>
         /*<ThemedView style={styles.wrap(colorScheme)}>
          <Button component={
@@ -68,14 +76,18 @@ const PageHeaderTemplate: FC<Props> = ({ style, isPageHeader }) => {
         {
           isPageHeader ?
             <>
-              <Button onClick={navigateToSearchScreen} component={<AntDesign style={[styles.icon, colorStyle]} name="search1"
+
+              <Button onClick={navigateToDownloadScreen} component={<Feather style={[styles.icon, colorStyle,
+              styles.gap]} name="download"
                 size={24} color="black" />} />
 
-              <Button component={<Octicons style={[styles.icon, colorStyle]} name="history"
+              <Button onClick={navigateToHistoryScreen} component={<Octicons style={[styles.icon, colorStyle, styles.gap]} name="history"
                 size={24} color="black" />} />
 
-              <Button component={<Feather style={[styles.icon, colorStyle]} name="download"
-                size={24} color="black" />} />
+              <Button onClick={navigateToMenuScreen} component={<AntDesign
+              style={[styles.icon, colorStyle, styles.gap, styles.profile]}
+              name="menuunfold"
+                size={18} color="black" />} />
 
             </>
             : ""

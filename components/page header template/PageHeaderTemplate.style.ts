@@ -9,16 +9,16 @@ export const styles = StyleSheet.create({
     padding: 0,
   },
   bgDark: {
-    backgroundColor: Colors.dark.background,
+    backgroundColor: Colors.dark.transparent,
   },
   bgLight: {
-    backgroundColor: Colors.dark.background,
+    backgroundColor: Colors.light.transparent,
   },
   colorLight: {
     color: Colors.light.tint,
   },
   colorDark: {
-    color: Colors.light.tint,
+    color: Colors.dark.tint,
   },
   wrap: {
     flexDirection: "row",
@@ -32,7 +32,7 @@ export const styles = StyleSheet.create({
     alignItems: "center",
   },
   icon: {
-    fontSize: 20,
+    fontSize: 20
   },
   wrapText: {
     flexDirection: "row",
@@ -48,6 +48,9 @@ export const styles = StyleSheet.create({
     paddingBottom: 5,
     textAlign: "center",
     width: 70,
+  },
+  gap:{
+   marginLeft:20
   },
   logoText: {
     fontFamily: "KanitRegular",
@@ -69,4 +72,11 @@ export const styles = StyleSheet.create({
   iconDark: {
     color: Colors.light.tint,
   },
+  profile:{
+    padding:3,
+    borderRadius:50,
+    justifyContent:"center",
+    alignItems:"center",
+    fontSize:19,
+  }
 });

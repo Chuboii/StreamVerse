@@ -10,8 +10,6 @@ import { ThemedText } from "@/components/ThemedText"
 import VideoTemplate from "@/components/video template/VideoTemplate"
 export default function SearchPage() {
   const colorScheme = useColorScheme()
-
-
   const navigateBack = () => router.back()
   const colorStyle = colorScheme === 'light' ? styles.colorLight : styles.colorDark;
   const bgStyle = colorScheme === 'light' ? styles.bgLight : styles.bgLight;
@@ -23,8 +21,8 @@ export default function SearchPage() {
         <Button onClick={navigateBack} component={<AntDesign name="arrowleft" size={24}
           style={[styles.icon, colorStyle]} />} />
         <TextInput
-          style={[styles.input]}
-          placeholder="Search videos here"
+          style={[styles.input, colorStyle]}
+          placeholder="Search videos here or insert video link to download"
           autoFocus
           placeholderTextColor={Colors[colorScheme ?? "light"].tint}
         />
@@ -69,7 +67,7 @@ const styles = StyleSheet.create({
     color: Colors.light.tint,
   },
   colorDark: {
-    color: Colors.light.tint,
+    color: Colors.dark.tint,
   },
   input: {
     flex: 1,
