@@ -49,24 +49,24 @@ const VideoFoldersList = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.wrap}>
-        <Button onClick={navigateToFolderContents} component={<VideoFolder />} />
-        <Button component={<VideoFolder />} />
-        <Button component={<VideoFolder />} />
-        <Button component={<VideoFolder />} />
+        <Button disabled={false} onClick={navigateToFolderContents} component={<VideoFolder />} />
+        <Button disabled={false} component={<VideoFolder />} />
+        <Button disabled={false} component={<VideoFolder />} />
+        <Button disabled={false} component={<VideoFolder />} />
       </View>
 
       <View style={styles.wrap}>
-        <Button component={<VideoFolder />} />
-        <Button component={<VideoFolder />} />
-        <Button component={<VideoFolder />} />
-        <Button component={<VideoFolder />} />
+        <Button disabled={false} component={<VideoFolder />} />
+        <Button disabled={false} component={<VideoFolder />} />
+        <Button disabled={false} component={<VideoFolder />} />
+        <Button disabled={false} component={<VideoFolder />} />
       </View>
 
       <View style={styles.wrap}>
-        <Button component={<VideoFolder />} />
-        <Button component={<VideoFolder />} />
-        <Button component={<VideoFolder />} />
-        <Button component={<VideoFolder />} />
+        <Button disabled={false} component={<VideoFolder />} />
+        <Button disabled={false} component={<VideoFolder />} />
+        <Button disabled={false} component={<VideoFolder />} />
+        <Button disabled={false} component={<VideoFolder />} />
       </View>
     </SafeAreaView>
   );

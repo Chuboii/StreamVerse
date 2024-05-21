@@ -55,7 +55,7 @@ const StreamsVideoDetails = () => {
                 </ThemedText>
               </View>
             </View>
-            <Button
+            <Button disabled={false}
               style={styles.btn}
               component={
                 <ThemedText style={[styles.text, styles.btnText]}>
@@ -67,7 +67,7 @@ const StreamsVideoDetails = () => {
           </View>
 
           <View style={styles.wrap}>
-            <Button
+            <Button disabled={false}
               style={styles.iconBox}
               component={
                 <View style={styles.wrap}>
@@ -81,7 +81,7 @@ const StreamsVideoDetails = () => {
                 </View>
               }
             />
-            <Button
+            <Button disabled={false}
               style={styles.iconBox}
               component={
                 <View style={styles.wrap}>
