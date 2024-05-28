@@ -16,7 +16,7 @@ const Downloads = () => {
   const colorStyle =
     colorScheme === "light" ? styles.colorLight : styles.colorDark;
   const navigateBack = () => router.back();
-  
+
   return (
     <View>
       <View style={styles.headWrap}>
@@ -36,40 +36,40 @@ const Downloads = () => {
           Downloads{" "}
         </ThemedText>
 
-<View style={styles.wrap}>
-        <Button
-          component={
-            <MaterialCommunityIcons
-              name="format-list-text"
-              color="white"
-              style={[styles.icon, colorStyle, styles.cog]}/>}/>
-      
-       <Button
-          component={
-            <AntDesign
-              name="setting"
-              size={24}
-              style={[styles.icon, colorStyle]}
-            />
-          }
-        />
+        <View style={styles.wrap}>
+          <Button
+            component={
+              <MaterialCommunityIcons
+                name="format-list-text"
+                color="white"
+                style={[styles.icon, colorStyle, styles.cog]} />} />
 
+          <Button
+            component={
+              <AntDesign
+                name="setting"
+                size={24}
+                style={[styles.icon, colorStyle]}
+              />
+            }
+          />
+
+        </View>
       </View>
+
+      <View>
+        <VideoTemplate sourceIcon="camera-outline"
+          title="Bro didnt see that coming at all"
+          data="500mb"
+          lengthOfVideo="0:01"
+          isUserProfile={true}
+          sourceStyle={styles.sourceStyle}
+          floatStyle={styles.sourceStyle}
+          wrapQualityData={styles.sourceStyle}
+        />
+      </View>
+
     </View>
-    
-    <View>
-    <VideoTemplate sourceIcon="camera-outline"
-    title="Bro didnt see that coming at all"
-  data="500mb"
-  lengthOfVideo="0:01"
-isUserProfile={true}
-sourceStyle={styles.sourceStyle}
-floatStyle={styles.sourceStyle}
-wrapQualityData={styles.sourceStyle}
-    />
-    </View>
-    
-     </View>
   )
 }
 
@@ -95,14 +95,14 @@ const styles = StyleSheet.create({
   colorDark: {
     color: Colors.dark.tint,
   },
-  wrap:{
-    flexDirection:'row',
-    alignItems:'center'
+  wrap: {
+    flexDirection: 'row',
+    alignItems: 'center'
   },
-  cog:{
-    right:15
+  cog: {
+    right: 15
   },
-  sourceStyle:{
-    display:"none"
+  sourceStyle: {
+    display: "none"
   }
 })

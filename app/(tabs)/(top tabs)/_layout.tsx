@@ -56,7 +56,7 @@ export default function Layout() {
     <>
       <SafeAreaView style={[styles.container, bgStyle]}>
 
-        <PageHeaderTemplate isPageHeader={true} />
+        <PageHeaderTemplate style={{}} isPageHeader={true} />
       </SafeAreaView>
 
       <SafeAreaView>

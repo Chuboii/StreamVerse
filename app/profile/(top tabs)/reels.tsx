@@ -9,7 +9,7 @@ import { Colors } from "@/constants/Colors";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import React from 'react'
-import ReelsTemplate from "@/components/reels template/ReelsTemplate"
+import ReelsTemplate from "@/components/reels preview/ReelsPreview"
 import ProfileTabs from "@/components/profile tabs/ProfileTabs"
 
 const screenWidth = Dimensions.get("window").width

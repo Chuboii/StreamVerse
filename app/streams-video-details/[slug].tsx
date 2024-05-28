@@ -17,16 +17,16 @@ import { router } from "expo-router";
 import React from "react";
 import StreamsVideo from "@/components/streams video/StreamsVideo";
 import StreamsTemplate from "@/components/streams template/StreamsTemplate";
-import Comment from "@/components/comments/Comment";
+import Comment from "@/components/streams comments/Comment";
 const StreamsVideoDetails = () => {
   const colorScheme = useColorScheme();
   const colorStyle =
     colorScheme === "light" ? styles.colorLight : styles.colorDark;
-  const bgStyle = colorScheme === "light" ? styles.bgLight : styles.bgLight;
+  const bgStyle = colorScheme === "light" ? styles.bgLight : styles.bgDark;
 
   return (
     <SafeAreaView style={styles.container}>
-      <Comment />
+      { }
       <StreamsVideo />
       <ScrollView style={styles.wrapper}>
         <View style={styles.pad}>
@@ -223,5 +223,11 @@ const styles = StyleSheet.create({
   },
   colorDark: {
     color: Colors.dark.tint,
+  },
+  bgDark: {
+    backgroundColor: Colors.dark.transparent,
+  },
+  bgLight: {
+    backgroundColor: Colors.light.transparent,
   },
 });

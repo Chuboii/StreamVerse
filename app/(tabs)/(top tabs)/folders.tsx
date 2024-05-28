@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, FlatList, ScrollView } from 'react-native';
 import * as FileSystem from 'expo-file-system';
 import {
   StorageAccessFramework as SAF
@@ -9,77 +9,117 @@ import VideoFolder from "@/components/video folder/VideoFolder"
 import Button from "@/components/button template/Button"
 import { router } from "expo-router"
 import { SafeAreaView } from "react-native-safe-area-context"
+import * as MediaLibrary from 'expo-media-library';
+import { useAppDispatch } from '@/hooks/use dispatch/useDispatch';
+import { localVideoAlbum, localVideoParentHeader } from '@/lib/redux/reducers/storeLocalVideoData/storeLocalVideoData';
+
 
 const VideoFoldersList = () => {
-  const [videoFolders, setVideoFolders] = useState([]);
-  const [folders, setFolders] = useState(null)
+  const [albums, setAlbums] = useState(null);
+  const [permissionResponse, requestPermission] = MediaLibrary.usePermissions();
+  const dispatch = useAppDispatch()
+
+  async function getAlbums() {
+    try{
+    if (permissionResponse?.status !== 'granted') {
+      await requestPermission();
+    }
+    const fetchedAlbums = await MediaLibrary.getAlbumsAsync({
+      includeSmartAlbums: true,
+    });
 
 
-  //   useEffect(() => {
-  //     async function printNestedContents() {
-  //  try{
-  //    const files = await FileSystem.cacheDirectory
+    const filteredEmptyAlbums: {
+      assetCount: number;
+      id: string;
+      title: string;
+      type?: MediaLibrary.AlbumType | undefined;
+      startTime: number;
+      endTime: number;
+      approximateLocation?: MediaLibrary.Location | undefined;
+      locationNames?: string[] | undefined;
+    }[] = []
 
-  //   const a = await   FileSystem.readDirectoryAsync(files) 
+    //filter out empty array
+    for (let alb of fetchedAlbums) {
+      const albumAssets = await MediaLibrary.getAssetsAsync({
+        album: alb.id,
+        mediaType: 'video',  // Fetch only videos
+        first: 5,  // Limit to 5 videos
+      })
 
-  //   console.log(a)
-  //    /*
-  //   const permissions = await SAF.requestDirectoryPermissionsAsync();
-  //   if (!permissions.granted) return
-  //   const { directoryUri } = permissions;
-  //   const filesInRoot = await SAF.readDirectoryAsync(directoryUri);
-  //   const filesInNestedFolder = await SAF.readDirectoryAsync(filesInRoot[0]);
-  //   // Both values will be the same
-  //   console.log({ filesInRoot, filesInNestedFolder })*/
-  //  }
-  //  catch(e){
-  //     console.log(e)
-  //  }
-  // }
-  // printNestedContents()
+      // Fetch additional info for each asset
+      const assetDetails = await Promise.all(
+        albumAssets.assets.map(async (asset) => {
+          const assetInfo = await MediaLibrary.getAssetInfoAsync(asset.id);
+          return assetInfo;
+        })
+      );
 
-  //   }, [])
+      if (assetDetails.length > 0) {
+        filteredEmptyAlbums.push({ ...alb, assetCount: assetDetails.length })
+      }
+    }
+
+    if (filteredEmptyAlbums) {
+      const sortByTitleAscending = filteredEmptyAlbums.sort((a, b) => {
+        if (a.title < b.title) {
+          return -1;
+        }
+        if (a.title > b.title) {
+          return 1;
+        }
+        return 0;
+      })
+
+      setAlbums(sortByTitleAscending);
+
+      dispatch(localVideoAlbum(sortByTitleAscending))
+    }
+  }
+  catch(err){
+    console.log(err)
+  }
+  }
 
 
-  const navigateToFolderContents = () => {
+
+  useEffect(() => {
+    getAlbums()
+  }, [])
+
+
+  const navigateToFolderContents = (id: number) => {
     router.push({
-      pathname: "video-list/5"
+      pathname: `video-list/${id}`
     })
   }
+
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.wrap}>
-        <Button disabled={false} onClick={navigateToFolderContents} component={<VideoFolder />} />
-        <Button disabled={false} component={<VideoFolder />} />
-        <Button disabled={false} component={<VideoFolder />} />
-        <Button disabled={false} component={<VideoFolder />} />
-      </View>
-
-      <View style={styles.wrap}>
-        <Button disabled={false} component={<VideoFolder />} />
-        <Button disabled={false} component={<VideoFolder />} />
-        <Button disabled={false} component={<VideoFolder />} />
-        <Button disabled={false} component={<VideoFolder />} />
-      </View>
-
-      <View style={styles.wrap}>
-        <Button disabled={false} component={<VideoFolder />} />
-        <Button disabled={false} component={<VideoFolder />} />
-        <Button disabled={false} component={<VideoFolder />} />
-        <Button disabled={false} component={<VideoFolder />} />
-      </View>
+      <ScrollView>
+        <View style={styles.wrap}>
+          {albums && albums.map(album => {
+            return (
+              <Button key={album.id} disabled={false} onClick={() => navigateToFolderContents(album.id)} component={<VideoFolder totalNumOfVideos={album.assetCount} folderName={album.title} />} />
+            )
+          })}
+        </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    alignItems: "center",
-    justifyContent: "center",
-    paddingVertical: 10
+    paddingVertical: 10,
+    width: "100%",
+    justifyContent: "center"
   },
   wrap: {
-    flexDirection: "row"
+    flexWrap: "wrap",
+    flexDirection: 'row',
+    justifyContent: "center"
   }
 })
 export default VideoFoldersList;

@@ -11,7 +11,7 @@ const Prompt = () => {
         <AntDesign
           name="download"
           size={27}
-          style={[styles.headerIcon]}
+          style={[styles.headerIcon, styles.icon]}
         />
       </View>
 
@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    backgroundColor: "rgba(255,255,255,.2)",
+    backgroundColor: "rgba(255,255,255,.1)",
     padding: 20,
     marginHorizontal: 20,
     borderRadius: 10
@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
 
   },
   icon: {
-
+    color: 'white'
   },
   headerIcon: {
     fontSize: 19

@@ -2,8 +2,7 @@ import { View, TextInput, Image, Text, StyleSheet } from 'react-native'
 import React, { useRef } from 'react'
 import { AntDesign, FontAwesome5, MaterialCommunityIcons } from "@expo/vector-icons";
 import { ThemedText } from "@/components/ThemedText";
-import { ThemedView } from
-  "@/components/ThemedView";
+import { ThemedView } from "@/components/ThemedView";
 import Button from "@/components/button template/Button";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { Colors } from "@/constants/Colors";
@@ -19,6 +18,12 @@ const videoDownloader = () => {
   const ref = useRef(null)
   useScrollToTop(ref)
 
+
+  const submitLinkToWebviewForDisplayingAndDownload = () => {
+    router.navigate("/webview")
+  }
+
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.headWrap}>
@@ -32,6 +37,7 @@ const videoDownloader = () => {
             placeholderTextColor="rgba(255,255,255,.6)"
             style={styles.input}
             placeholder="Paste link to download"
+            onEndEditing={submitLinkToWebviewForDisplayingAndDownload}
           />
         </ThemedView>
         <Button
@@ -114,8 +120,8 @@ const styles = StyleSheet.create({
     borderRadius: 50
   },
   image: {
-    width: 50,
-    height: 50,
+    width: 60,
+    height: 60,
     borderRadius: 10
   },
   colorLight: {
@@ -132,7 +138,7 @@ const styles = StyleSheet.create({
   box: {
     justifyContent: "center",
     alignItems: "center",
-    margin: 20,
+    margin: 10,
     marginVertical: 10
   },
   boxWrapper: {

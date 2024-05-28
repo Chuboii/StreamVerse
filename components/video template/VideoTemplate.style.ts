@@ -59,24 +59,24 @@ export const styles = StyleSheet.create({
     fontFamily: "ExoRegular",
   },
   iconLight: {
-    color: Colors.light.tint
+    color: Colors.light.tint,
   },
   iconDark: {
-    color: Colors.dark.tint
+    color: Colors.dark.tint,
   },
-  icon:{
-    fontSize:15,
-    marginRight:10
+  icon: {
+    fontSize: 15,
+    marginRight: 10,
   },
   wrapBox: {
     flexDirection: "row",
     padding: 7,
     borderRadius: 5,
-    alignItems:"center"
+    alignItems: "center",
   },
-  wrapData:{
-    flexDirection:"row",
-    justifyContent:"space-between",
-    flex:1
-  }
+  wrapData: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    flex: 1,
+  },
 });

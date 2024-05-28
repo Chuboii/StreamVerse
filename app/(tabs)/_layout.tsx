@@ -10,7 +10,7 @@ export default function TabLayout() {
 
   return (
     <Tabs
-    initialRouteName="streams"
+      initialRouteName="streams"
       screenOptions={{
         tabBarShowLabel: false,
         tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
@@ -47,7 +47,7 @@ export default function TabLayout() {
           ),
         }}
       />
-   <Tabs.Screen
+      <Tabs.Screen
         name="streams"
         options={{
           title: 'streams',

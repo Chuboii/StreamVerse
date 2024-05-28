@@ -1,18 +1,26 @@
-import { View, StyleSheet, Text } from "react-native"
+import { View, StyleSheet, Text, Dimensions } from "react-native"
 import { AntDesign } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { ThemedText } from "@/components/ThemedText"
 import { FC } from "react";
+import PlayListTemplate from "../playlist template/PlaylistTemplate";
 
-const VideoFolder: FC = () => {
+type Prop = {
+  folderName: string;
+  totalNumOfVideos: string | number
+}
+const VideoFolder: FC<Prop> = ({ folderName, totalNumOfVideos }) => {
 
   return (
     <View style={styles.container}>
-      <MaterialCommunityIcons name="folder-open" size={24} color="black"
+      <PlayListTemplate
+
+      />
+      {/* <MaterialCommunityIcons name="folder-open" size={24} color="black"
         style={styles.icon} />
       <ThemedText darkColor="white" lightColor="black"
-        style={styles.text} numberOfLines={2}>Camera ttt dghd dydy</ThemedText>
-      <ThemedText darkColor="gray" lightColor="gray" style={[styles.text, styles.text1]}> 8 videos </ThemedText>
+        style={styles.text} numberOfLines={2}>{folderName}</ThemedText>
+      <ThemedText darkColor="gray" lightColor="gray" style={[styles.text, styles.text1]}> {totalNumOfVideos} videos </ThemedText> */}
 
     </View >
   )
@@ -23,10 +31,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     margin: 10,
-    minWidth: 80,
+    padding: 0,
+    marginHorizontal: 6,
+    width: Dimensions.get("window").width / 5
   },
   icon: {
-    fontSize: 50,
+    fontSize: 60,
     color: "orangered"
   },
   text: {

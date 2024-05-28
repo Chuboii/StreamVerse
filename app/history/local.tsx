@@ -9,7 +9,7 @@ import VideoTemplate from "@/components/video template/VideoTemplate"
 import { AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
 import Button from "@/components/button template/Button"
 import { router, usePathname } from "expo-router"
-import ReelsTemplate from "@/components/reels template/ReelsTemplate"
+import ReelsTemplate from "@/components/reels preview/ReelsPreview"
 import { Octicons } from '@expo/vector-icons';
 const LocalHistory = () => {
   const colorScheme = useColorScheme()

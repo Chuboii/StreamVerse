@@ -1,46 +1,24 @@
-import React, { useRef } from 'react';
-import { View, ScrollView, Animated, Dimensions } from 'react-native';
-import ReelVideoTemplate from "@/components/reels video/ReelsVideo"
+import { StyleSheet, Text, View, useWindowDimensions } from 'react-native'
+import React from 'react'
+import ReelsVideo from '@/components/reels video/ReelsVideo'
+import { SafeAreaView } from 'react-native-safe-area-context'
+import { ThemedText } from '@/components/ThemedText'
+import CommentTemplate from '@/components/reels comment/ReelsComment'
+import { useAppSelector } from '@/hooks/use selector/useSelector'
 
-const { height: screenHeight } = Dimensions.get('window');
-
-const Reels = () => {
-  const scrollViewRef = useRef<ScrollView>(null)
-  const scrollY = useRef(new Animated.Value(0)).current;
-
-  const handleScroll = Animated.event(
-    [{ nativeEvent: { contentOffset: { y: scrollY } } }],
-    { useNativeDriver: true }
-  );
-
-  const scrollToVideo = (index: any) => {
-    if (scrollViewRef.current) {
-      scrollViewRef.current.scrollTo({
-        y: index * screenHeight,
-        animated: true,
-      });
-    }
-  };
+const reels = () => {
+  const { height } = useWindowDimensions()
+  const toggleReelsComment = useAppSelector(state => state.toggle.toggleReelsComment)
 
 
   return (
-    <View style={{ flex: 1, backgroundColor: "blue" }}>
-      <ScrollView
-        ref={scrollViewRef}
-        pagingEnabled
-        showsVerticalScrollIndicator={false}
-        onScroll={handleScroll}
-        scrollEventThrottle={16}
-      >
-        {/* <ReelVideoTemplate videoStyle={{ height: screenHeight + 100, width: "100%",
-      backgroundColor:"red", flex:1 }} />
-      <ReelVideoTemplate videoStyle={{ height: screenHeight + 100, width: "100%",
-      backgroundColor:"red", flex:1 }} />
-      <ReelVideoTemplate videoStyle={{ height: screenHeight + 100, width: 200,
-      backgroundColor:"red", flex:1 }} />*/}
-      </ScrollView>
+    <View>
+      {toggleReelsComment && < CommentTemplate />}
+      <ReelsVideo />
     </View>
-  );
-};
+  )
+}
 
-export default Reels
+export default reels
+
+const styles = StyleSheet.create({})

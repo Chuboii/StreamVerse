@@ -10,7 +10,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import StreamsCategory from "@/components/streams category/StreamsCategory"
 import StreamsTemplate from "@/components/streams template/StreamsTemplate"
-import ReelsTemplate from "@/components/reels template/ReelsTemplate"
+import ReelsTemplate from "@/components/reels preview/ReelsPreview"
 import { useScrollToTop } from '@react-navigation/native';
 import StreamsMinimizedPreview from "@/components/streams minimized preview/StreamsMinimizedPreview"
 

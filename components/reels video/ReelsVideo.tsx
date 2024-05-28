@@ -1,36 +1,111 @@
-//import Video, {VideoRef} from 'react-native-video';
-import {useRef} from "react"
- import {StyleSheet} from "react-native"
-// Within your render function, assuming you have a file called
-// "background.mp4" in your project. You can include multiple videos
-// on a single screen if you like.
- 
-const VideoPlayer = () => {
-// const videoRef = useRef<VideoRef>(null);
-// const background = require('../../assets/videos/dummy.mp4');
- 
- return (
-{/*   <Video 
-    // Can be a URL or a local file.
-    source={background}
-    // Store reference  
-    ref={videoRef}
-    // Callback when remote video is buffering                                      
-            
-    style={styles.backgroundVideo}
-   />*/}
- )
-}
- 
-// Later on in your styles..
-const styles = StyleSheet.create({
-  backgroundVideo: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    bottom: 0,
-    right: 0,
-  },
-});
+import React, { useCallback, useEffect, useState } from 'react';
+import { View, StyleSheet, Button, TouchableOpacity, Pressable, SectionList, FlatList, Dimensions, useWindowDimensions } from 'react-native';
+import VideoPost from '../reels post/ReelsPost';
 
-export default VideoPlayer
+const data = [
+  {
+    id: 1,
+    url: "https://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4"
+  },
+  {
+    id: 2,
+    url: "https://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4"
+  },
+  {
+    id: 3,
+    url: "https://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4"
+  },
+  {
+    id: 4,
+    url: "https://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4"
+  },
+  {
+    id: 5,
+    url: "https://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4"
+  },
+  {
+    id: 6,
+    url: "https://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4"
+  }
+]
+
+const height = Dimensions.get("window").height
+
+export default function ReelsVideo() {
+  const [activePostId, setActivePostId] = useState(data[0].id)
+
+  const onViewableItemsChanged = useCallback(({ changed, viewableItems }: { changed: any, viewableItems: any }) => {
+    if (viewableItems.length > 0 && viewableItems[0].isViewable) {
+      setActivePostId(viewableItems[0].item.id)
+
+
+    }
+  }, [])
+
+  return (
+    <View style={[styles.container, { height: height - 60 }]} >
+
+      <FlatList
+        data={data}
+        keyExtractor={(data) => String(data.id)}
+        renderItem={({ item }) => {
+          return <VideoPost url={item.url} activePostId={activePostId} postId={item.id} />
+        }}
+        viewabilityConfig={{
+          itemVisiblePercentThreshold: 50
+        }}
+        onViewableItemsChanged={onViewableItemsChanged}
+        pagingEnabled
+      />
+
+    </View >
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+
+  },
+  video: {
+    alignSelf: 'center',
+    width: '100%',
+    height: "100%",
+  },
+  buttons: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  wrapper: {
+    position: "absolute",
+    bottom: 10,
+    right: 10
+  },
+  icon: {
+    color: "white",
+    elevation: 10,
+    fontSize: 32
+  },
+  play: {
+    justifyContent: "center",
+    alignSelf: "center",
+    alignItems: "center",
+    fontSize: 40,
+    flex: 1,
+    zIndex: 1,
+    position: "absolute",
+    top: '50%'
+  },
+  text: {
+    fontFamily: "KanitRegular",
+    fontSize: 13,
+    marginTop: 7
+  },
+  wrap: {
+    marginVertical: 10,
+    alignItems: "center"
+  },
+  overlay: {
+    top: '20%',
+  }
+});

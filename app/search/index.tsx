@@ -5,7 +5,7 @@ import { Text, TextInput, ScrollView, View, StyleSheet } from "react-native"
 import { useLocalSearchParams, router } from "expo-router"
 import { AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
 import Button from "@/components/button template/Button"
-import ReelsTemplate from "@/components/reels template/ReelsTemplate"
+import ReelsTemplate from "@/components/reels preview/ReelsPreview"
 import { ThemedText } from "@/components/ThemedText"
 import VideoTemplate from "@/components/video template/VideoTemplate"
 export default function SearchPage() {

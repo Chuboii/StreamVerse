@@ -5,9 +5,10 @@ import { Ionicons } from "@expo/vector-icons";
 import { styles } from "./PlaylistTemplate.style";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { Colors } from "@/constants/Colors";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FontAwesome6 } from "@expo/vector-icons";
 import Button from "@/components/button template/Button";
+import * as VideoThumbnails from 'expo-video-thumbnails';
 
 type Prop = {
   imageUrl: ImageSourcePropType | undefined;
@@ -26,6 +27,7 @@ type Prop = {
   floatStyle: object;
   imageBoxStyle: object;
   numOfVideos: string;
+  fileLocalUrl: string;
 };
 const PlayListTemplate = ({
   imageUrl,
@@ -39,10 +41,38 @@ const PlayListTemplate = ({
   source = "",
   sourceIcon = "",
   imageBoxStyle = {},
+  fileLocalUrl:""
 }: Prop) => {
   const colorScheme = useColorScheme();
   const iconStyle =
     colorScheme === "light" ? styles.iconLight : styles.iconDark;
+  const [thumbnailUrl, setThumbnailUrl] = useState("")
+
+
+  useEffect(() => {
+    if (fileLocalUrl) {
+      generateThumbnail(fileLocalUrl)
+    }
+  }, [])
+
+
+  const generateThumbnail = async (uri) => {
+    try {
+      const { uri: thumbnailUri } = await VideoThumbnails.getThumbnailAsync(
+        uri,
+        {
+          time: 500,
+        }
+      );
+
+
+      setThumbnailUrl(thumbnailUri)
+      console.log("thumb" + thumbnailUri)
+    } catch (error) {
+      console.error("Error generating thumbnail:", error);
+    }
+  };
+
 
   return (
     <View style={[styles.container, containerStyle]}>

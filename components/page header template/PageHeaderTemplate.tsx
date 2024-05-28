@@ -21,7 +21,7 @@ type Props = {
   isPageHeader: boolean
 }
 
-const PageHeaderTemplate: FC<Props> = ({ style, isPageHeader }) => {
+const PageHeaderTemplate: FC<Props> = ({ style = null, isPageHeader }) => {
 
   const colorScheme = useColorScheme()
   const [isActive, setIsActive] = useState(false)
@@ -53,7 +53,7 @@ const PageHeaderTemplate: FC<Props> = ({ style, isPageHeader }) => {
               style={[styles.icon]} />
           </View>
           <Text
-            style={[styles.logoText, colorStyle]}>StreamTube </Text>
+            style={[styles.logoText, colorStyle]}>StreamVerse </Text>
         </View>
         /*<ThemedView style={styles.wrap(colorScheme)}>
          <Button disabled={false} component={
