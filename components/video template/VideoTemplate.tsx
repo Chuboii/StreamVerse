@@ -14,26 +14,26 @@ import { Entypo } from '@expo/vector-icons';
 import { useAppDispatch } from "@/hooks/use dispatch/useDispatch";
 
 type Prop = {
-  imageUrl: string;
-  imageStyle: object;
-  containerStyle: object;
-  wrapperStyle: object;
-  wrapStyle: object;
-  title: string;
-  lengthOfVideo: string;
-  videoFileUrl: string;
-  videoHeight: number;
-  videoWidth: number;
-  source: string;
-  sourceStyle: object;
-  sourceIcon: any;
-  qualityBoxStyle: object;
-  floatStyle: object;
-  imageBoxStyle: object;
-  titleStyle: object;
-  isUserProfile: boolean;
-  wrapQualityData: object;
-  wrapBoxStyle: object;
+  imageUrl: string | undefined;
+  imageStyle: object | undefined;
+  containerStyle: object | undefined;
+  wrapperStyle: object | undefined;
+  wrapStyle: object | undefined;
+  title: string | undefined;
+  lengthOfVideo: string | number;
+  videoFileUrl: string | undefined;
+  videoHeight: number | undefined;
+  videoWidth: number | undefined;
+  source: string | undefined;
+  sourceStyle: object | undefined;
+  sourceIcon: any | undefined;
+  qualityBoxStyle: object | undefined;
+  floatStyle: object | undefined;
+  imageBoxStyle: object | undefined;
+  titleStyle: object | undefined;
+  isUserProfile: boolean | undefined;
+  wrapQualityData: object | undefined;
+  wrapBoxStyle: object | undefined;
 }
 
 const VideoTemplate = ({
@@ -90,7 +90,7 @@ const VideoTemplate = ({
 
   }, [contentLoaded])
 
-  const generateThumbnail = async (uri) => {
+  const generateThumbnail = async (uri: string) => {
     try {
       const { uri: thumbnailUri } = await VideoThumbnails.getThumbnailAsync(
         uri,

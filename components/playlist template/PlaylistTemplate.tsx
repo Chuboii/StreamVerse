@@ -9,28 +9,30 @@ import { useEffect, useState } from "react";
 import { FontAwesome6 } from "@expo/vector-icons";
 import Button from "@/components/button template/Button";
 import * as VideoThumbnails from 'expo-video-thumbnails';
+import * as MediaLibrary from 'expo-media-library';
+
 
 type Prop = {
   imageUrl: ImageSourcePropType | undefined;
-  imageStyle: object;
-  containerStyle: object;
-  wrapperStyle: object;
-  wrapStyle: object;
-  title: string;
-  quality: string;
-  lengthOfVideos: string;
-  data: string;
-  source: string;
-  sourceStyle: object;
-  sourceIcon: string;
-  qualityBoxStyle: object;
-  floatStyle: object;
-  imageBoxStyle: object;
-  numOfVideos: string;
-  fileLocalUrl: string;
+  imageStyle: object | undefined;
+  containerStyle: object | undefined;
+  wrapperStyle: object | undefined;
+  wrapStyle: object | undefined;
+  title: string | undefined;
+  quality: string | undefined;
+  lengthOfVideos: string | undefined;
+  data: string | undefined;
+  source: string | undefined;
+  sourceStyle: object | undefined;
+  sourceIcon: string | undefined;
+  qualityBoxStyle: object | undefined;
+  floatStyle: object | undefined;
+  imageBoxStyle: object | undefined;
+  numOfVideos: number | string | undefined;
+  fileLocalUrl: string | undefined;
 };
 const PlayListTemplate = ({
-  imageUrl,
+  imageUrl = undefined,
   imageStyle = {},
   containerStyle = {},
   wrapperStyle = {},
@@ -41,37 +43,11 @@ const PlayListTemplate = ({
   source = "",
   sourceIcon = "",
   imageBoxStyle = {},
-  fileLocalUrl:""
+  fileLocalUrl = ""
 }: Prop) => {
   const colorScheme = useColorScheme();
   const iconStyle =
     colorScheme === "light" ? styles.iconLight : styles.iconDark;
-  const [thumbnailUrl, setThumbnailUrl] = useState("")
-
-
-  useEffect(() => {
-    if (fileLocalUrl) {
-      generateThumbnail(fileLocalUrl)
-    }
-  }, [])
-
-
-  const generateThumbnail = async (uri) => {
-    try {
-      const { uri: thumbnailUri } = await VideoThumbnails.getThumbnailAsync(
-        uri,
-        {
-          time: 500,
-        }
-      );
-
-
-      setThumbnailUrl(thumbnailUri)
-      console.log("thumb" + thumbnailUri)
-    } catch (error) {
-      console.error("Error generating thumbnail:", error);
-    }
-  };
 
 
   return (
