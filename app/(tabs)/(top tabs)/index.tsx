@@ -3,6 +3,9 @@ import { View, StatusBar, StyleSheet, ScrollView, Text } from "react-native";
 import * as MediaLibrary from "expo-media-library";
 import VideoTemplate from "@/components/video template/VideoTemplate";
 import Spinner from "@/components/spinner/Spinner";
+import { router } from "expo-router";
+import { useAppDispatch } from "@/hooks/use dispatch/useDispatch";
+import { localVideoContentUrl } from "@/lib/redux/reducers/storeLocalVideoData/storeLocalVideoData";
 
 interface VideoAsset {
   id: string;
@@ -20,6 +23,7 @@ const VideoScreen: React.FC = () => {
   const [permissionResponse, requestPermission] = MediaLibrary.usePermissions();
   const [thumbnailUrl, setThumbnailUrl] = useState<string>("");
   const [loading, setLoading] = useState(false)
+  const dispatch = useAppDispatch()
 
   useEffect(() => {
     getAlbums();
@@ -39,8 +43,29 @@ const VideoScreen: React.FC = () => {
         includeSmartAlbums: true,
       });
 
-      const allVideos = await extractVideosFromAlbums(fetchedAlbums);
-      console.log(allVideos);
+      const filteredEmptyAlbums = [];
+
+      for (const alb of fetchedAlbums) {
+        const albumAssets = await MediaLibrary.getAssetsAsync({
+          mediaType: "video",
+          album: alb.id,
+          first: 1,
+        })
+
+        if (albumAssets.assets.length > 0) {
+          const assetDetails = await Promise.all(
+            albumAssets.assets.map(async (asset) => {
+              const assetInfo = await MediaLibrary.getAssetInfoAsync(asset.id);
+              return assetInfo;
+            })
+          );
+
+          if (assetDetails.length > 0) {
+            filteredEmptyAlbums.push({ ...alb, assetCount: assetDetails.length });
+          }
+        }
+      }
+      const allVideos = await extractVideosFromAlbums(filteredEmptyAlbums);
 
       setVideos(allVideos);
     } catch (err) {
@@ -52,25 +77,32 @@ const VideoScreen: React.FC = () => {
 
   const extractVideosFromAlbums = async (
     albums: MediaLibrary.Album[]
-  ): Promise<VideoAsset[]> => {
+  ) => {
     try {
-      const allVideos: VideoAsset[] = [];
+      const allVideos = [];
 
       for (const album of albums) {
         const albumAssets = await MediaLibrary.getAssetsAsync({
           album: album.id,
           mediaType: ["video"],
           first: 1,
+
         });
 
-        const assetDetails = await Promise.all(
+        await Promise.all(
           albumAssets.assets.map(async (asset) => {
-            const assetInfo = await MediaLibrary.getAssetInfoAsync(asset.id);
-            return assetInfo as VideoAsset;
-          })
-        );
+            try {
+              const assetInfo = await MediaLibrary.getAssetInfoAsync(asset.id);
+              allVideos.push({ ...asset, albumTitle: album.title });
 
-        allVideos.push(...assetDetails);
+              return assetInfo as VideoAsset;
+            }
+            catch (err) {
+              console.log(err);
+
+            }
+          })
+        )
       }
       return allVideos;
 
@@ -79,6 +111,11 @@ const VideoScreen: React.FC = () => {
       console.log(err);
     }
   };
+
+  const navigateToPlaySelectedLocalVideo = (url: string) => {
+    dispatch(localVideoContentUrl(url))
+    router.navigate("local-video-player")
+  }
 
   return (
     <View style={styles.container}>
@@ -111,6 +148,9 @@ const VideoScreen: React.FC = () => {
               isUserProfile={false}
               wrapQualityData={undefined}
               wrapBoxStyle={undefined}
+              videoId={video.id}
+              videoAlbumTitle={video.albumTitle}
+              onClick={() => navigateToPlaySelectedLocalVideo(video.uri)}
             />
           ))
         )}

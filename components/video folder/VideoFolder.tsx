@@ -14,11 +14,11 @@ const VideoFolder: FC<Prop> = ({ folderName, totalNumOfVideos, url }) => {
   return (
     <View style={styles.container}>
       <PlayListTemplate
-        // imageUrl={require("../../../assets/images/dummy.jpeg")}
+        imageUrl={require("../../assets/images/dummy.jpeg")}
         title={folderName}
-        lengthOfVideos="110 mins"
+        lengthOfVideos=""
         numOfVideos={totalNumOfVideos}
-        imageUrl={undefined}
+        // imageUrl={undefined}
         imageStyle={undefined}
         containerStyle={undefined}
         wrapperStyle={undefined}
@@ -34,7 +34,6 @@ const VideoFolder: FC<Prop> = ({ folderName, totalNumOfVideos, url }) => {
         fileLocalUrl={""}
       />
 
-      <ThemedText style={{ fontSize: 100 }}>Loading..</ThemedText>
       {/* <MaterialCommunityIcons name="folder-open" size={24} color="black"
         style={styles.icon} />
       <ThemedText darkColor="white" lightColor="black"
@@ -46,12 +45,11 @@ const VideoFolder: FC<Prop> = ({ folderName, totalNumOfVideos, url }) => {
 
 const styles = StyleSheet.create({
   container: {
-    alignItems: "center",
-    justifyContent: "center",
+    // alignItems: "center",
+    // justifyContent: "center",
     margin: 10,
     padding: 0,
     marginHorizontal: 6,
-    width: Dimensions.get("window").width / 5,
   },
   icon: {
     fontSize: 60,

@@ -79,4 +79,8 @@ export const styles = StyleSheet.create({
     justifyContent: "space-between",
     flex: 1,
   },
+  albumTitle: {
+    maxWidth: 100,
+    textTransform: "lowercase",
+  },
 });

@@ -22,6 +22,7 @@ import * as MediaLibrary from 'expo-media-library';
 import { useAppSelector } from "@/hooks/use selector/useSelector";
 import { useAppDispatch } from "@/hooks/use dispatch/useDispatch";
 import { localVideoParentHeader } from "@/lib/redux/reducers/storeLocalVideoData/storeLocalVideoData";
+import Spinner from "@/components/spinner/Spinner";
 
 const VideoList = () => {
   const { slug } = useLocalSearchParams();
@@ -31,14 +32,16 @@ const VideoList = () => {
   const getLocalVideoAlbum = useAppSelector(state => state.localVideo.localVideoAlbum)
   const dispatch = useAppDispatch()
   const [getLocalVideoAlbumParentHeader, setGetLocalVideoAlbumParentHeader] = useState(null)
-
+  const [loading, setLoading] = useState(false)
   const navigateBack = () => router.back();
-
+  const getLocalVideoAlbumContents = useAppSelector(state => state.localVideo.localVideoAlbumContents)
 
 
   useEffect(() => {
     async function getAlbumAssets() {
       try {
+        setLoading(true)
+
         const albumAssets = await MediaLibrary.getAssetsAsync({
           album: slug,
           mediaType: 'video',  // Fetch only videos  // Limit to 5 videos
@@ -54,24 +57,18 @@ const VideoList = () => {
 
         setAssets(assetDetails);
 
-        if (getLocalVideoAlbum) {
-          const getAssetParentAlbumName = getLocalVideoAlbum?.filter(f => f.id === slug)
-          console.log(getAssetParentAlbumName);
 
-          setGetLocalVideoAlbumParentHeader(getAssetParentAlbumName[0].title)
-        }
-        else {
-          console.log('not working');
-
-        }
+        setGetLocalVideoAlbumParentHeader(getLocalVideoAlbumContents?.title)
       }
       catch (err) {
         console.log(err)
+      } finally {
+        setLoading(false)
       }
     }
     getAlbumAssets();
 
-  }, [slug, setGetLocalVideoAlbumParentHeader]);
+  }, [slug, getLocalVideoAlbumContents]);
 
 
 
@@ -105,7 +102,7 @@ const VideoList = () => {
           }
         />
       </View>
-
+      {loading && <Spinner />}
       <FlatList
         style={styles.wrap}
         data={assets}

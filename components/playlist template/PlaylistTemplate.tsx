@@ -54,6 +54,10 @@ const PlayListTemplate = ({
     <View style={[styles.container, containerStyle]}>
       <View style={[styles.imageBox, imageBoxStyle]}>
         <Image style={styles.img} source={imageUrl} alt="sh" />
+        <View style={styles.imageBox}></View>
+        <View style={styles.imageShade}></View>
+        <View style={styles.imageShade2}></View>
+
       </View>
 
       <View style={styles.wrapper}>
@@ -64,7 +68,7 @@ const PlayListTemplate = ({
 
           <View style={[styles.wrap, wrapStyle]}>
             <View style={styles.wrapBox}>
-              <ThemedText style={styles.text}>{numOfVideos} </ThemedText>
+              <ThemedText style={styles.text}>{numOfVideos} videos </ThemedText>
               <ThemedText style={styles.text}>{lengthOfVideos} </ThemedText>
             </View>
             <Button

@@ -83,6 +83,10 @@ export default function RootLayout() {
             headerShown: false,
             animation: "slide_from_bottom"
           }} />
+          <Stack.Screen name="local-video-player/index" options={{
+            headerShown: false,
+            animation: "none"
+          }} />
           <Stack.Screen name="+not-found" />
         </Stack>
       </ThemeProvider>

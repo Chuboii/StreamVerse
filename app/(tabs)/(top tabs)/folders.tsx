@@ -6,8 +6,9 @@ import Button from "@/components/button template/Button";
 import { router } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useAppDispatch } from '@/hooks/use dispatch/useDispatch';
-import { localVideoAlbum } from '@/lib/redux/reducers/storeLocalVideoData/storeLocalVideoData';
+import { localVideoAlbum, localVideoAlbumContents } from '@/lib/redux/reducers/storeLocalVideoData/storeLocalVideoData';
 import Spinner from '@/components/spinner/Spinner';
+import { ThemedText } from '@/components/ThemedText';
 
 interface Album {
   assetCount: number;
@@ -27,21 +28,15 @@ const VideoFoldersList: React.FC = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (!permissionResponse || permissionResponse.status !== 'granted') {
-      requestPermission().then(response => {
-        if (response.status === 'granted') {
-          getAlbums();
-        } else {
-          console.log('Permission not granted');
-        }
-      });
-    } else {
-      getAlbums();
-    }
+    getAlbums();
   }, []);
 
-  const getAlbums = async (): Promise<void> => {
+  const getAlbums = async () => {
     try {
+      if (permissionResponse?.status !== 'granted') {
+        await requestPermission()
+      }
+
       setLoading(true);
       const fetchedAlbums = await MediaLibrary.getAlbumsAsync({
         includeSmartAlbums: false,
@@ -51,12 +46,10 @@ const VideoFoldersList: React.FC = () => {
 
       for (const alb of fetchedAlbums) {
         const albumAssets = await MediaLibrary.getAssetsAsync({
+          mediaType: "video",
           album: alb.id,
-          mediaType: 'video',
-          first: 10,
-        });
-
-
+          first: 1,
+        })
 
         if (albumAssets.assets.length > 0) {
           const assetDetails = await Promise.all(
@@ -84,22 +77,24 @@ const VideoFoldersList: React.FC = () => {
     }
   };
 
-  const navigateToFolderContents = (id: string): void => {
+  const navigateToFolderContents = (id: string, album): void => {
+    console.log(album);
+    dispatch(localVideoAlbumContents(album))
     router.push({
       pathname: `video-list/${id}`,
     });
-  };
+  }
 
   return (
     <SafeAreaView style={styles.container}>
-      {loading && <Spinner />}
       <ScrollView>
+        {loading && <Spinner message='Fetching video folders' />}
         <View style={styles.wrap}>
           {albums && albums.map((album) => (
             <Button
               key={album.id}
               disabled={false}
-              onClick={() => navigateToFolderContents(album.id)}
+              onClick={() => navigateToFolderContents(album.id, album)}
               component={<VideoFolder totalNumOfVideos={album.assetCount} folderName={album.title} />}
             />
           ))}

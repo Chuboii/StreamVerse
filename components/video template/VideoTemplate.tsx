@@ -1,4 +1,4 @@
-import { View, Image, Text } from "react-native"
+import { View, Image, Text, TouchableOpacity } from "react-native"
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from "@/components/ThemedView"
 import { Ionicons } from '@expo/vector-icons';
@@ -12,6 +12,7 @@ import * as FileSystem from 'expo-file-system';
 import * as VideoThumbnails from 'expo-video-thumbnails';
 import { Entypo } from '@expo/vector-icons';
 import { useAppDispatch } from "@/hooks/use dispatch/useDispatch";
+import { useAppSelector } from "@/hooks/use selector/useSelector";
 
 type Prop = {
   imageUrl: string | undefined;
@@ -34,6 +35,9 @@ type Prop = {
   isUserProfile: boolean | undefined;
   wrapQualityData: object | undefined;
   wrapBoxStyle: object | undefined;
+  videoId: string | undefined;
+  videoAlbumTitle: string | undefined;
+  onClick: () => void;
 }
 
 const VideoTemplate = ({
@@ -41,7 +45,7 @@ const VideoTemplate = ({
   wrapStyle = {}, title = "", videoHeight, videoWidth, lengthOfVideo = "", videoFileUrl = "", source = "",
   sourceStyle = {}, wrapQualityData = {},
   titleStyle = {}, isUserProfile = false, wrapBoxStyle = {},
-  sourceIcon = null, qualityBoxStyle = {}, floatStyle = {}, imageBoxStyle = {} }: Prop) => {
+  sourceIcon = null, qualityBoxStyle = {}, floatStyle = {}, imageBoxStyle = {}, videoId = "", videoAlbumTitle = "", onClick }: Prop) => {
   const colorScheme = useColorScheme()
   const [isInListForm, setIsInListForm] = useState(false)
   const iconStyle = colorScheme === 'light' ? styles.iconLight : styles.iconDark;
@@ -50,6 +54,8 @@ const VideoTemplate = ({
   const [videoQuality, setVideoQuality] = useState("")
   const [thumbnailUrl, setThumbnailUrl] = useState("")
   const dispatch = useAppDispatch()
+  const getLocalVideoAlbum = useAppSelector(state => state.localVideo.localVideoAlbum)
+  const [albumNames, setAlbumNames] = useState("")
 
   useEffect(() => {
     if (lengthOfVideo && videoFileUrl && videoWidth && videoHeight) {
@@ -61,7 +67,6 @@ const VideoTemplate = ({
       const formatSeconds = seconds > 0 && seconds < 10 ? `0${seconds}` : `${seconds}`
       const displayHrsMinSecs = hours === 0 ? `${formatMinutes}:${formatSeconds}` : `${hours}:${formatMinutes}:${formatSeconds}`
       setFormatedDuration(displayHrsMinSecs)
-
 
       if (videoWidth >= 3840 || videoHeight >= 2160) {
         setVideoQuality("4k")
@@ -86,7 +91,10 @@ const VideoTemplate = ({
       }
 
       generateThumbnail(videoFileUrl)
+
+      console.log(videoAlbumTitle);
     }
+
 
   }, [contentLoaded])
 
@@ -113,10 +121,8 @@ const VideoTemplate = ({
 
 
   return (
-    <View style={[styles.container, containerStyle]}>
+    <TouchableOpacity onPress={onClick} style={[styles.container, containerStyle]}>
       <View style={[styles.imageBox, imageBoxStyle]}>
-        <Ionicons style={[styles.float, floatStyle]} name="camera-outline" size={24}
-        />
         <Image style={styles.img} source={{ uri: thumbnailUrl ? thumbnailUrl : "https://firebasestorage.googleapis.com/v0/b/vidtube-4927a.appspot.com/o/images__3_-removebg-preview.png?alt=media&token=d2d957bd-0d48-415c-ba9a-08e9bb28c7ce" }} alt="sh" />
         <Text style={styles.mins}> {formatedDuration}</Text>
 
@@ -135,9 +141,11 @@ const VideoTemplate = ({
         <View style={[styles.wrap, { justifyContent: "space-between" },
           wrapStyle]}>
           <ThemedView style={[styles.wrapBox, sourceStyle]}>
-            <Ionicons style={[styles.icon, iconStyle]} name={sourceIcon} size={24}
+
+            <Ionicons style={[styles.icon, iconStyle]} name={videoAlbumTitle === "Camera" ? "camera-outline" : videoAlbumTitle === "Whatsapp" ? "logo-whatsapp" : "folder-open-outline"} size={24}
             />
-            <ThemedText style={styles.text}>{source}</ThemedText>
+
+            <ThemedText style={[styles.text, styles.albumTitle]} numberOfLines={1}>{videoAlbumTitle}</ThemedText>
           </ThemedView>
 
           {isUserProfile ? "" : <View style={[styles.wrap, qualityBoxStyle]}>
@@ -160,7 +168,7 @@ const VideoTemplate = ({
 
 
 
-    </View >
+    </TouchableOpacity >
   )
 }
 

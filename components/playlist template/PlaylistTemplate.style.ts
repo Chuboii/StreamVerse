@@ -13,12 +13,12 @@ export const styles = StyleSheet.create({
   container: {
     padding: 10,
     flexDirection: "row",
-    height: 110,
-    marginVertical: 5,
+    height: 120,
+    marginVertical: 3,
     alignItems: "center",
   },
   wrapper: {
-    marginLeft: 15,
+    marginLeft: 25,
     justifyContent: "space-between",
     width: "60%",
     paddingRight: 10,
@@ -35,6 +35,7 @@ export const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
     borderRadius: 10,
+    zIndex: 19,
   },
   text: {
     fontFamily: "KanitRegular",
@@ -59,5 +60,24 @@ export const styles = StyleSheet.create({
   },
   iconDark: {
     color: Colors.light.tint,
+  },
+  imageShade: {
+    width: "100%",
+    backgroundColor: "gray",
+    left: 6,
+    position: "absolute",
+    height: "90%",
+    elevation: 10,
+    borderRadius: 10,
+    zIndex: 10,
+  },
+  imageShade2: {
+    width: "100%",
+    backgroundColor: "rgba(255, 255, 255,.4)",
+    left: 12,
+    position: "absolute",
+    height: "80%",
+    elevation: 5,
+    borderRadius: 10,
   },
 });
