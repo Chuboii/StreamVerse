@@ -21,7 +21,7 @@ import { useState, useEffect } from 'react'
 import * as MediaLibrary from 'expo-media-library';
 import { useAppSelector } from "@/hooks/use selector/useSelector";
 import { useAppDispatch } from "@/hooks/use dispatch/useDispatch";
-import { localVideoParentHeader } from "@/lib/redux/reducers/storeLocalVideoData/storeLocalVideoData";
+import { localVideoContentUrl, localVideoParentHeader } from "@/lib/redux/reducers/storeLocalVideoData/storeLocalVideoData";
 import Spinner from "@/components/spinner/Spinner";
 
 const VideoList = () => {
@@ -72,6 +72,12 @@ const VideoList = () => {
 
 
 
+  const navigateToPlaySelectedLocalVideo = (url: string) => {
+    dispatch(localVideoContentUrl(url))
+    router.navigate("local-video-player")
+  }
+
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.headWrap}>
@@ -108,6 +114,7 @@ const VideoList = () => {
         data={assets}
         keyExtractor={(asset) => asset.id}
         renderItem={({ item }) => <VideoTemplate
+          onClick={() => navigateToPlaySelectedLocalVideo(item.uri)}
           sourceIcon="camera-outline"
           videoFileUrl={item.uri}
           title={item.filename}
