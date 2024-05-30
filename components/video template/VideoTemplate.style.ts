@@ -66,7 +66,7 @@ export const styles = StyleSheet.create({
   },
   icon: {
     fontSize: 15,
-    marginRight: 10,
+    marginRight: 6,
   },
   wrapBox: {
     flexDirection: "row",

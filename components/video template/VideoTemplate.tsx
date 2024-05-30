@@ -94,7 +94,7 @@ const VideoTemplate = ({
 
       console.log(videoAlbumTitle);
     }
-
+ 
 
   }, [contentLoaded])
 
@@ -142,7 +142,10 @@ const VideoTemplate = ({
           wrapStyle]}>
           <ThemedView style={[styles.wrapBox, sourceStyle]}>
 
-            <Ionicons style={[styles.icon, iconStyle]} name={videoAlbumTitle === "Camera" ? "camera-outline" : videoAlbumTitle === "Whatsapp" ? "logo-whatsapp" : "folder-open-outline"} size={24}
+            <Ionicons style={[styles.icon, iconStyle]} name={videoAlbumTitle ===
+            "Camera" ? "camera-outline" : videoAlbumTitle === "WhatsApp Animated Gifs" ?
+            "logo-whatsapp" : videoAlbumTitle === "WhatsApp Video" ?
+            "logo-whatsapp" : "folder-open-outline"} size={24}
             />
 
             <ThemedText style={[styles.text, styles.albumTitle]} numberOfLines={1}>{videoAlbumTitle}</ThemedText>

@@ -67,14 +67,14 @@ const VideoScreen: React.FC = () => {
       }
       const allVideos = await extractVideosFromAlbums(filteredEmptyAlbums);
 
-      setVideos(allVideos);
+const filteredOutDeletedAndEmptyVideos = allVideos.filter(f => f.duration !== 0)
+      setVideos(filteredOutDeletedAndEmptyVideos);
     } catch (err) {
       console.log(err);
     } finally {
       setLoading(false);
     }
-  };
-
+  }
   const extractVideosFromAlbums = async (
     albums: MediaLibrary.Album[]
   ) => {

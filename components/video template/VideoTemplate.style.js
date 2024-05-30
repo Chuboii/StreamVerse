@@ -60,24 +60,28 @@ exports.styles = react_native_1.StyleSheet.create({
         fontFamily: "ExoRegular",
     },
     iconLight: {
-        color: Colors_1.Colors.light.tint
+        color: Colors_1.Colors.light.tint,
     },
     iconDark: {
-        color: Colors_1.Colors.dark.tint
+        color: Colors_1.Colors.dark.tint,
     },
     icon: {
         fontSize: 15,
-        marginRight: 10
+        marginRight: 6,
     },
     wrapBox: {
         flexDirection: "row",
         padding: 7,
         borderRadius: 5,
-        alignItems: "center"
+        alignItems: "center",
     },
     wrapData: {
         flexDirection: "row",
         justifyContent: "space-between",
-        flex: 1
-    }
+        flex: 1,
+    },
+    albumTitle: {
+        maxWidth: 100,
+        textTransform: "lowercase",
+    },
 });
