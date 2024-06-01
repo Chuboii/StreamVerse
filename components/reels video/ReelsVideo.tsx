@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { View, StyleSheet, Button, TouchableOpacity, Pressable, SectionList, FlatList, Dimensions, useWindowDimensions } from 'react-native';
 import VideoPost from '../reels post/ReelsPost';
+import { useAppSelector } from '@/hooks/use selector/useSelector';
 
 const data = [
   {
@@ -33,6 +34,7 @@ const height = Dimensions.get("window").height
 
 export default function ReelsVideo() {
   const [activePostId, setActivePostId] = useState(data[0].id)
+  const getLocalVideoFilesFromAlbumArr = useAppSelector(state => state.localVideo.localVideoFilesFromAlbum)
 
   const onViewableItemsChanged = useCallback(({ changed, viewableItems }: { changed: any, viewableItems: any }) => {
     if (viewableItems.length > 0 && viewableItems[0].isViewable) {
@@ -46,10 +48,10 @@ export default function ReelsVideo() {
     <View style={[styles.container, { height: height - 60 }]} >
 
       <FlatList
-        data={data}
+        data={getLocalVideoFilesFromAlbumArr}
         keyExtractor={(data) => String(data.id)}
         renderItem={({ item }) => {
-          return <VideoPost url={item.url} activePostId={activePostId} postId={item.id} />
+          return <VideoPost url={item.uri} activePostId={activePostId} postId={item.id} videoTitle={item.filename} />
         }}
         viewabilityConfig={{
           itemVisiblePercentThreshold: 50

@@ -19,7 +19,9 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "legacyJetifier": false,
+      "package": "com.chuboi4.streamverse"
     },
     "web": {
       "bundler": "metro",
@@ -38,6 +40,14 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "3f43ec88-31b0-4414-b4e3-1ae2344e90d2"
+      }
     }
   }
 }

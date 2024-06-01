@@ -1,7 +1,7 @@
 import { View, Image, Text, TouchableOpacity } from "react-native"
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from "@/components/ThemedView"
-import { Ionicons } from '@expo/vector-icons';
+import { AntDesign, Ionicons } from '@expo/vector-icons';
 import { styles } from "./VideoTemplate.style"
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { Colors } from '@/constants/Colors';
@@ -13,6 +13,8 @@ import * as VideoThumbnails from 'expo-video-thumbnails';
 import { Entypo } from '@expo/vector-icons';
 import { useAppDispatch } from "@/hooks/use dispatch/useDispatch";
 import { useAppSelector } from "@/hooks/use selector/useSelector";
+import { createThumbnail } from "react-native-create-thumbnail";
+
 
 type Prop = {
   imageUrl: string | undefined;
@@ -94,7 +96,7 @@ const VideoTemplate = ({
 
       console.log(videoAlbumTitle);
     }
- 
+
 
   }, [contentLoaded])
 
@@ -107,9 +109,8 @@ const VideoTemplate = ({
         }
       );
 
-
       setThumbnailUrl(thumbnailUri)
-      console.log("thumb" + thumbnailUri)
+
     } catch (error) {
       console.error("Error generating thumbnail:", error);
     }
@@ -123,7 +124,12 @@ const VideoTemplate = ({
   return (
     <TouchableOpacity onPress={onClick} style={[styles.container, containerStyle]}>
       <View style={[styles.imageBox, imageBoxStyle]}>
-        <Image style={styles.img} source={{ uri: thumbnailUrl ? thumbnailUrl : "https://firebasestorage.googleapis.com/v0/b/vidtube-4927a.appspot.com/o/images__3_-removebg-preview.png?alt=media&token=d2d957bd-0d48-415c-ba9a-08e9bb28c7ce" }} alt="sh" />
+        {thumbnailUrl ?
+          <Image style={styles.img} source={{ uri: thumbnailUrl }} alt="sh" />
+          : <View style={[styles.imageBox, imageBoxStyle, { justifyContent: "center", alignItems: "center", height: "100%", width: "100%" }]}>
+            <AntDesign name="picture" color={'white'} size={24} />
+          </View>
+        }
         <Text style={styles.mins}> {formatedDuration}</Text>
 
       </View>
@@ -143,9 +149,9 @@ const VideoTemplate = ({
           <ThemedView style={[styles.wrapBox, sourceStyle]}>
 
             <Ionicons style={[styles.icon, iconStyle]} name={videoAlbumTitle ===
-            "Camera" ? "camera-outline" : videoAlbumTitle === "WhatsApp Animated Gifs" ?
-            "logo-whatsapp" : videoAlbumTitle === "WhatsApp Video" ?
-            "logo-whatsapp" : "folder-open-outline"} size={24}
+              "Camera" ? "camera-outline" : videoAlbumTitle === "WhatsApp Animated Gifs" ?
+              "logo-whatsapp" : videoAlbumTitle === "WhatsApp Video" ?
+                "logo-whatsapp" : "folder-open-outline"} size={24}
             />
 
             <ThemedText style={[styles.text, styles.albumTitle]} numberOfLines={1}>{videoAlbumTitle}</ThemedText>

@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState } from 'react';
 import { View, StyleSheet, TouchableOpacity, Pressable, SectionList, FlatList, Dimensions, useWindowDimensions, Image } from 'react-native';
-import { Video, ResizeMode, AVPlaybackStatusSuccess, AVPlaybackStatus } from 'expo-av';
+// import { Video, ResizeMode, AVPlaybackStatusSuccess, AVPlaybackStatus } from 'expo-av';
 import { AntDesign, FontAwesome5 } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
 import { FontAwesome6 } from '@expo/vector-icons';
@@ -12,7 +12,7 @@ import Button from '../button template/Button';
 import CommentTemplate from '../reels comment/ReelsComment';
 import { useAppDispatch } from '@/hooks/use dispatch/useDispatch';
 import { toggleReelsComment } from '@/lib/redux/reducers/toggle reducer/toggleReducer';
-
+import Video, { VideoRef } from 'react-native-video';
 
 const height = Dimensions.get("window").height
 
@@ -20,9 +20,10 @@ type Props = {
     url: string;
     activePostId: number;
     postId: number;
+    videoTitle: string;
 }
 
-const ReelVideoPost: FC<Props> = ({ url, activePostId, postId }) => {
+const ReelVideoPost: FC<Props> = ({ url, activePostId, postId, videoTitle }) => {
     const dispatch = useAppDispatch()
     const video = React.useRef<Video>();
     const [status, setStatus] = React.useState<AVPlaybackStatusSuccess>();
@@ -37,6 +38,9 @@ const ReelVideoPost: FC<Props> = ({ url, activePostId, postId }) => {
         if (pathname !== "/reels") {
             video.current?.pauseAsync()
         }
+
+        console.log(videoTitle);
+
     }, [pathname])
 
 
@@ -67,7 +71,20 @@ const ReelVideoPost: FC<Props> = ({ url, activePostId, postId }) => {
     return (
         <>
             <View style={[{ height: height - 60, flex: 1 }]}>
+
                 <Video
+                    source={{ uri: url }}
+                    // // Store reference  
+                    // ref={videoRef}
+                    // // Callback when remote video is buffering                                      
+                    // onBuffer={onBuffer}
+                    // // Callback when video cannot be loaded              
+                    // onError={onError}
+                    style={styles.video}
+                    pictureInPicture={true}
+                    showNotificationControls={true}
+                />
+                {/* <Video
                     // usePoster={true}
                     // posterSource={require("../../assets/images/dummy.jpeg")}
                     ref={video}
@@ -79,7 +96,7 @@ const ReelVideoPost: FC<Props> = ({ url, activePostId, postId }) => {
                     resizeMode={ResizeMode.COVER}
                     isLooping
                     onPlaybackStatusUpdate={status => setStatus(() => status)}
-                />
+                /> */}
 
                 <Pressable onPress={toggleVideoOnAndOff} style={[StyleSheet.absoluteFillObject]}>
                     {isPlaying ?? <View style={styles.play}>
@@ -94,31 +111,30 @@ const ReelVideoPost: FC<Props> = ({ url, activePostId, postId }) => {
                         style={[StyleSheet.absoluteFillObject, styles.overlay]}
                     >
                         <View style={styles.wrapper}>
-                            <View style={[styles.wrap, styles.imageBox]}>
+                            {/* <View style={[styles.wrap, styles.imageBox]}>
                                 <Image style={styles.image} source={require("@/assets/images/dummy.jpeg")} />
                                 <AntDesign style={[styles.icon, styles.imagePlus]} name="plus" size={24} color="black" />
-                            </View>
+                            </View> */}
                             <View style={styles.wrap}>
                                 <AntDesign style={[styles.icon, styles.increasedSize]} name="heart" size={24} color="black" />
-                                <ThemedText style={styles.text}>10.0K</ThemedText>
+                                { }
                             </View>
-                            <TouchableOpacity onPress={toggleCommentDisplay} style={styles.wrap}>
+                            {/* <TouchableOpacity onPress={toggleCommentDisplay} style={styles.wrap}>
                                 <FontAwesome style={[styles.icon, styles.increasedSize]} name="commenting" size={34} color="black" />
                                 <ThemedText style={styles.text}>10.0K</ThemedText>
                             </TouchableOpacity>
                             <View style={styles.wrap}>
                                 <FontAwesome style={[styles.icon, styles.wrap]} name="share" size={24} color="black" />
                                 <ThemedText style={[styles.text, { marginTop: -10, fontSize: 15 }]}>100</ThemedText>
-                            </View>
+                            </View> */}
 
-                            <Button style={styles.wrap} disabled={false} component={
+                            {/* <Button style={styles.wrap} disabled={false} component={
                                 <FontAwesome6 style={[styles.icon, styles.wrap]} name="download" size={24} color="black" />
-                            } />
+                            } /> */}
                         </View>
 
                         <View style={styles.wrapBox}>
-                            <ThemedText style={styles.name}>Joe Doe</ThemedText>
-                            <ThemedText style={styles.post} numberOfLines={2}>The bird just chilling out of nowhere mann. this is soo cool</ThemedText>
+                            <ThemedText style={styles.post} numberOfLines={2}>{videoTitle}</ThemedText>
                         </View>
                     </LinearGradient>
                 </Pressable>

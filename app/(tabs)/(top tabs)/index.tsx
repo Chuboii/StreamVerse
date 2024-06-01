@@ -5,7 +5,7 @@ import VideoTemplate from "@/components/video template/VideoTemplate";
 import Spinner from "@/components/spinner/Spinner";
 import { router } from "expo-router";
 import { useAppDispatch } from "@/hooks/use dispatch/useDispatch";
-import { localVideoContentUrl } from "@/lib/redux/reducers/storeLocalVideoData/storeLocalVideoData";
+import { localVideoContentUrl, localVideoFilesFromAlbum } from "@/lib/redux/reducers/storeLocalVideoData/storeLocalVideoData";
 
 interface VideoAsset {
   id: string;
@@ -22,8 +22,8 @@ const VideoScreen: React.FC = () => {
   const [videos, setVideos] = useState<VideoAsset[]>([]);
   const [permissionResponse, requestPermission] = MediaLibrary.usePermissions();
   const [thumbnailUrl, setThumbnailUrl] = useState<string>("");
-  const [loading, setLoading] = useState(false)
-  const dispatch = useAppDispatch()
+  const [loading, setLoading] = useState(false);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     getAlbums();
@@ -32,7 +32,7 @@ const VideoScreen: React.FC = () => {
   const getAlbums = async () => {
     try {
       if (permissionResponse?.status !== "granted") {
-        setLoading(true)
+        setLoading(true);
         const response = await requestPermission();
         if (response.status !== "granted") {
           console.log("Permission not granted");
@@ -50,7 +50,7 @@ const VideoScreen: React.FC = () => {
           mediaType: "video",
           album: alb.id,
           first: 1,
-        })
+        });
 
         if (albumAssets.assets.length > 0) {
           const assetDetails = await Promise.all(
@@ -61,23 +61,27 @@ const VideoScreen: React.FC = () => {
           );
 
           if (assetDetails.length > 0) {
-            filteredEmptyAlbums.push({ ...alb, assetCount: assetDetails.length });
+            filteredEmptyAlbums.push({
+              ...alb,
+              assetCount: assetDetails.length,
+            });
           }
         }
       }
       const allVideos = await extractVideosFromAlbums(filteredEmptyAlbums);
 
-const filteredOutDeletedAndEmptyVideos = allVideos.filter(f => f.duration !== 0)
+      const filteredOutDeletedAndEmptyVideos = allVideos.filter((f) => f.duration !== 0);
+
       setVideos(filteredOutDeletedAndEmptyVideos);
+      dispatch(localVideoFilesFromAlbum(filteredOutDeletedAndEmptyVideos))
     } catch (err) {
       console.log(err);
     } finally {
       setLoading(false);
     }
-  }
-  const extractVideosFromAlbums = async (
-    albums: MediaLibrary.Album[]
-  ) => {
+  };
+
+  const extractVideosFromAlbums = async (albums: MediaLibrary.Album[]) => {
     try {
       const allVideos = [];
 
@@ -86,7 +90,6 @@ const filteredOutDeletedAndEmptyVideos = allVideos.filter(f => f.duration !== 0)
           album: album.id,
           mediaType: ["video"],
           first: 1,
-
         });
 
         await Promise.all(
@@ -96,26 +99,22 @@ const filteredOutDeletedAndEmptyVideos = allVideos.filter(f => f.duration !== 0)
               allVideos.push({ ...asset, albumTitle: album.title });
 
               return assetInfo as VideoAsset;
-            }
-            catch (err) {
+            } catch (err) {
               console.log(err);
-
             }
           })
-        )
+        );
       }
       return allVideos;
-
-    }
-    catch (err) {
+    } catch (err) {
       console.log(err);
     }
   };
 
   const navigateToPlaySelectedLocalVideo = (url: string) => {
-    dispatch(localVideoContentUrl(url))
-    router.navigate("local-video-player")
-  }
+    dispatch(localVideoContentUrl(url));
+    router.navigate("local-video-player");
+  };
 
   return (
     <View style={styles.container}>
