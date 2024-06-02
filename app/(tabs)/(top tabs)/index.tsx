@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { View, StatusBar, StyleSheet, ScrollView, Text } from "react-native";
+import { View, StatusBar, StyleSheet, ScrollView, Text, FlatList } from "react-native";
 import * as MediaLibrary from "expo-media-library";
 import VideoTemplate from "@/components/video template/VideoTemplate";
 import Spinner from "@/components/spinner/Spinner";
-import { router } from "expo-router";
+import { router, usePathname } from "expo-router";
 import { useAppDispatch } from "@/hooks/use dispatch/useDispatch";
 import { localVideoAlbum, localVideoAlbumContents, localVideoFilesFromAlbum, localVideoSingleContentDetails } from "@/lib/redux/reducers/storeLocalVideoData/storeLocalVideoData";
-
+import * as ScreenOrientation from 'expo-screen-orientation'
 interface VideoAsset {
   id: string;
   filename: string;
@@ -23,11 +23,21 @@ const VideoScreen: React.FC = () => {
   const [permissionResponse, requestPermission] = MediaLibrary.usePermissions();
   const [thumbnailUrl, setThumbnailUrl] = useState<string>("");
   const [loading, setLoading] = useState(false);
+  const [updateOrientation, setUpdateOrientation] = useState(false)
   const dispatch = useAppDispatch();
+  const pathname = usePathname()
 
   useEffect(() => {
+
+    if (pathname === "/") {
+      const unlockScreenOrientation = async () => {
+        ScreenOrientation.unlockAsync()
+        setUpdateOrientation(true)
+      }
+      unlockScreenOrientation()
+    }
     getAlbums();
-  }, [loading]);
+  }, [loading, updateOrientation]);
 
   const getAlbums = async () => {
     try {
@@ -120,21 +130,26 @@ const VideoScreen: React.FC = () => {
     <View style={styles.container}>
       {loading && <Spinner />}
       <StatusBar hidden={true} />
-      <ScrollView>
-        {videos.length === 0 ? (
-          <Text>No videos found.</Text>
-        ) : (
-          videos.map((video) => (
-            <VideoTemplate
-              key={video.id}
+      {videos.length === 0 ? (
+        <Text>No videos found.</Text>
+      ) :
+        <FlatList
+          data={videos}
+          keyExtractor={data => String(data.id)}
+          showsVerticalScrollIndicator={false}
+          renderItem={({ item }) => {
+            if (item.filename.split('.').includes("HEVC-PSA")) {
+              return null
+            }
+            return (<VideoTemplate
               sourceIcon="camera-outline"
-              title={video.filename}
-              lengthOfVideo={video.duration}
-              source={video.creationTime.toString()}
+              title={item.filename}
+              lengthOfVideo={item.duration}
+              source={item.creationTime.toString()}
               qualityBoxStyle={styles.qStyles}
-              videoFileUrl={video.uri}
-              videoHeight={video.height}
-              videoWidth={video.width}
+              videoFileUrl={item.uri}
+              videoHeight={item.height}
+              videoWidth={item.width}
               imageUrl={""}
               imageStyle={undefined}
               containerStyle={undefined}
@@ -147,13 +162,13 @@ const VideoScreen: React.FC = () => {
               isUserProfile={false}
               wrapQualityData={undefined}
               wrapBoxStyle={undefined}
-              videoId={video.id}
-              videoAlbumTitle={video.albumTitle}
-              onClick={() => navigateToPlaySelectedLocalVideo(video)}
-            />
-          ))
-        )}
-      </ScrollView>
+              videoId={item.id}
+              videoAlbumTitle={item.albumTitle}
+              onClick={() => navigateToPlaySelectedLocalVideo(item)}
+            />)
+          }}
+        />
+      }
     </View>
   );
 };

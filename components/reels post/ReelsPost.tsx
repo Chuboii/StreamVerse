@@ -1,5 +1,5 @@
-import React, { FC, useEffect, useState } from 'react';
-import { View, StyleSheet, TouchableOpacity, Pressable, SectionList, FlatList, Dimensions, useWindowDimensions, Image } from 'react-native';
+import React, { FC, useEffect, useRef, useState } from 'react';
+import { View, StyleSheet, TouchableOpacity, Pressable, SectionList, FlatList, Dimensions, useWindowDimensions, Image, TouchableWithoutFeedback } from 'react-native';
 // import { Video, ResizeMode, AVPlaybackStatusSuccess, AVPlaybackStatus } from 'expo-av';
 import { AntDesign, FontAwesome5 } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
@@ -13,6 +13,7 @@ import CommentTemplate from '../reels comment/ReelsComment';
 import { useAppDispatch } from '@/hooks/use dispatch/useDispatch';
 import { toggleReelsComment } from '@/lib/redux/reducers/toggle reducer/toggleReducer';
 import Video, { VideoRef } from 'react-native-video';
+import Slider from '@react-native-community/slider';
 
 const height = Dimensions.get("window").height
 
@@ -25,64 +26,122 @@ type Props = {
 
 const ReelVideoPost: FC<Props> = ({ url, activePostId, postId, videoTitle }) => {
     const dispatch = useAppDispatch()
-    const video = React.useRef<Video>();
-    const [status, setStatus] = React.useState<AVPlaybackStatusSuccess>();
+    const [status, setStatus] = React.useState<{ isPlaying: boolean }>({});
     const pathname = usePathname()
     const [render, setRender] = useState(false)
+    const videoRef = useRef<VideoRef>()
+    const [storeLastTapOnVideo, setStoreLastTapOnVideo] = useState(null)
+    const [isHideTitleAndPlaybackControls, setIsHideTitleAndPlaybackControls] = useState(true)
+    const [storeCurrentVideoTime, setStoreCurrentVideoTime] = useState(null)
+    const [storeTotalVideoTime, setStoreTotalVideoTime] = useState(null)
+    const [storeTotalVideoTimeInSeconds, setStoreTotalVideoTimeInSeconds] = useState(0)
+    const [storeCurrentVideoTimeInSeconds, setStoreCurrentVideoTimeInSeconds] = useState(0)
 
-    const isPlaying = status?.isPlaying
 
     // console.log(isPlaying);
 
     useEffect(() => {
         if (pathname !== "/reels") {
-            video.current?.pauseAsync()
+            videoRef.current?.pause()
         }
-
-        console.log(videoTitle);
-
     }, [pathname])
 
 
     useEffect(() => {
         if (activePostId !== postId) {
-            video.current?.pauseAsync()
+            videoRef.current?.pause()
         }
-
-        if (activePostId === postId) {
-            video.current?.playAsync()
+        else if (activePostId === postId) {
+            videoRef.current?.resume()
         }
-    }, [activePostId, video.current])
+    }, [activePostId, videoRef.current])
 
-    const toggleVideoOnAndOff = async () => {
-        if (isPlaying) {
-            video.current?.pauseAsync()
-            setRender(false)
+
+    // const toggleCommentDisplay = () => {
+    //     dispatch(toggleReelsComment(true))
+    // }
+
+
+
+    const togglePlayAndPauseLocalVideo = () => {
+
+        if (!videoRef.current) return null
+
+        if (status.isPlaying) {
+            videoRef.current.pause()
         }
         else {
-            video.current?.playAsync()
-            setRender(true)
+            videoRef.current.resume()
         }
+
     }
 
-    const toggleCommentDisplay = () => {
-        dispatch(toggleReelsComment(true))
+    const handleVideoEndAndPlayFromBeginning = () => {
+
+        if (!videoRef.current) return null
+
+        videoRef.current.seek(0)
     }
+
+    const handleErrorProducedFromVideoPlayback = (err) => {
+        console.log("error playing video")
+        console.log(err);
+    }
+
+    const handleGettingTotalVideoTime = (data) => {
+        const { duration } = data
+
+        setStoreTotalVideoTimeInSeconds(duration)
+    }
+
+    const handleGettingCurrentVideoTime = (data) => {
+        const { currentTime } = data
+
+        setStoreCurrentVideoTimeInSeconds(currentTime)
+    }
+
+    const handleWhenUserPicksUpTheSliderInitially = (data) => {
+        if (!videoRef.current) return null
+
+        videoRef.current.seek(data)
+
+    }
+
+
+
+
+
     return (
         <>
-            <View style={[{ height: height - 60, flex: 1 }]}>
+            <TouchableWithoutFeedback style={{ height: 50 }}>
+                <Slider
+                    style={styles.slider}
+                    minimumValue={0}
+                    maximumValue={storeTotalVideoTimeInSeconds}
+                    minimumTrackTintColor="orangered"
+                    maximumTrackTintColor="gray"
+                    thumbTintColor='orangered'
+                    value={storeCurrentVideoTimeInSeconds}
+                    onValueChange={handleWhenUserPicksUpTheSliderInitially}
+                    onSlidingStart={handleWhenUserPicksUpTheSliderInitially}
+                />
 
+            </TouchableWithoutFeedback>
+            <View style={[{ height: height - 60, flex: 1 }]}>
                 <Video
                     source={{ uri: url }}
-                    // // Store reference  
-                    // ref={videoRef}
-                    // // Callback when remote video is buffering                                      
-                    // onBuffer={onBuffer}
-                    // // Callback when video cannot be loaded              
-                    // onError={onError}
-                    style={styles.video}
+                    ref={videoRef}
+                    onError={handleErrorProducedFromVideoPlayback}
+                    style={styles.backgroundVideo}
+                    resizeMode='contain'
                     pictureInPicture={true}
                     showNotificationControls={true}
+                    onPlaybackStateChanged={(state) => setStatus(state)}
+                    onEnd={handleVideoEndAndPlayFromBeginning}
+                    onLoad={handleGettingTotalVideoTime}
+                    onProgress={handleGettingCurrentVideoTime}
+                // onValueChange={handleValueChange}
+
                 />
                 {/* <Video
                     // usePoster={true}
@@ -98,12 +157,12 @@ const ReelVideoPost: FC<Props> = ({ url, activePostId, postId, videoTitle }) => 
                     onPlaybackStatusUpdate={status => setStatus(() => status)}
                 /> */}
 
-                <Pressable onPress={toggleVideoOnAndOff} style={[StyleSheet.absoluteFillObject]}>
-                    {isPlaying ?? <View style={styles.play}>
+                <Pressable onPress={togglePlayAndPauseLocalVideo} style={[StyleSheet.absoluteFillObject]}>
+                    {status.isPlaying ?? <View style={styles.play}>
                         <FontAwesome5 name="play" size={50} color="white" style={{ elevation: 100 }} />
                     </View>}
 
-                    {!isPlaying && <View style={styles.play}>
+                    {!status.isPlaying && <View style={styles.play}>
                         <FontAwesome5 name="play" size={50} color="white" style={{ elevation: 100 }} />
                     </View>}
                     <LinearGradient
@@ -183,7 +242,7 @@ const styles = StyleSheet.create({
     text: {
         fontFamily: "KanitRegular",
         fontSize: 14,
-        marginTop: 5
+        marginBottom: 15
     },
     wrap: {
         marginVertical: 9,
@@ -201,14 +260,15 @@ const styles = StyleSheet.create({
         fontFamily: "KanitRegular",
         width: 300,
         fontSize: 15,
-        marginTop: 7
+        marginTop: -40
     },
     name: {
         fontFamily: "KanitRegular",
         fontSize: 23
     },
     increasedSize: {
-        fontSize: 35
+        fontSize: 35,
+        marginTop: -50
     },
     imageBox: {
         width: 50,
@@ -232,5 +292,18 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         textAlign: "center",
         padding: 2
-    }
+    },
+    backgroundVideo: {
+        height: "100%",
+        width: "100%",
+    },
+    slider: {
+        position: "absolute",
+        bottom: 5,
+        width: Dimensions.get("window").width,
+        height: 30,
+        left: 0,
+        right: 0,
+        zIndex: 2,
+    },
 });

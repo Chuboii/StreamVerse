@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, useWindowDimensions } from 'react-native'
-import React from 'react'
+import React, { useEffect } from 'react'
 import ReelsVideo from '@/components/reels video/ReelsVideo'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { ThemedText } from '@/components/ThemedText'
@@ -10,6 +10,9 @@ const reels = () => {
   const { height } = useWindowDimensions()
   const toggleReelsComment = useAppSelector(state => state.toggle.toggleReelsComment)
 
+  useEffect(() => {
+
+  }, [])
 
   return (
     <View>

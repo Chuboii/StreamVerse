@@ -21,7 +21,7 @@ import { useState, useEffect } from 'react'
 import * as MediaLibrary from 'expo-media-library';
 import { useAppSelector } from "@/hooks/use selector/useSelector";
 import { useAppDispatch } from "@/hooks/use dispatch/useDispatch";
-import { localVideoContentUrl, localVideoParentHeader } from "@/lib/redux/reducers/storeLocalVideoData/storeLocalVideoData";
+import { localVideoParentHeader, localVideoSingleContentDetails } from "@/lib/redux/reducers/storeLocalVideoData/storeLocalVideoData";
 import Spinner from "@/components/spinner/Spinner";
 
 const VideoList = () => {
@@ -73,7 +73,7 @@ const VideoList = () => {
 
 
   const navigateToPlaySelectedLocalVideo = (url: string) => {
-    dispatch(localVideoContentUrl(url))
+    dispatch(localVideoSingleContentDetails(url))
     router.navigate("local-video-player")
   }
 
@@ -113,21 +113,29 @@ const VideoList = () => {
         style={styles.wrap}
         data={assets}
         keyExtractor={(asset) => asset.id}
-        renderItem={({ item }) => <VideoTemplate
-          onClick={() => navigateToPlaySelectedLocalVideo(item.uri)}
-          sourceIcon="camera-outline"
-          videoFileUrl={item.uri}
-          title={item.filename}
-          videoHeight={item.height}
-          videoWidth={item.width}
-          lengthOfVideo={item.duration}
-          sourceStyle={styles.sStyles}
-          floatStyle={styles.fStyles}
-          wrapStyle={styles.wStyles}
-          containerStyle={styles.cStyles}
-          wrapQualityData={styles.wrapQuality}
-          wrapBoxStyle={styles.wrapBox}
-        />}
+        renderItem={({ item }) => {
+          if (item.filename.split('.').includes("HEVC-PSA")) {
+            return null
+          }
+          return (
+            <VideoTemplate
+              onClick={() => navigateToPlaySelectedLocalVideo(item)}
+              sourceIcon="camera-outline"
+              videoFileUrl={item.uri}
+              title={item.filename}
+              videoHeight={item.height}
+              videoWidth={item.width}
+              lengthOfVideo={item.duration}
+              sourceStyle={styles.sStyles}
+              floatStyle={styles.fStyles}
+              wrapStyle={styles.wStyles}
+              containerStyle={styles.cStyles}
+              wrapQualityData={styles.wrapQuality}
+              wrapBoxStyle={styles.wrapBox}
+            />
+          )
+        }
+        }
       />
 
 

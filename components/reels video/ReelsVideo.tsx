@@ -3,44 +3,15 @@ import { View, StyleSheet, Button, TouchableOpacity, Pressable, SectionList, Fla
 import VideoPost from '../reels post/ReelsPost';
 import { useAppSelector } from '@/hooks/use selector/useSelector';
 
-const data = [
-  {
-    id: 1,
-    url: "https://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4"
-  },
-  {
-    id: 2,
-    url: "https://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4"
-  },
-  {
-    id: 3,
-    url: "https://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4"
-  },
-  {
-    id: 4,
-    url: "https://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4"
-  },
-  {
-    id: 5,
-    url: "https://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4"
-  },
-  {
-    id: 6,
-    url: "https://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4"
-  }
-]
-
 const height = Dimensions.get("window").height
 
 export default function ReelsVideo() {
-  const [activePostId, setActivePostId] = useState(data[0].id)
+  const [activePostId, setActivePostId] = useState(0)
   const getLocalVideoFilesFromAlbumArr = useAppSelector(state => state.localVideo.localVideoFilesFromAlbum)
 
   const onViewableItemsChanged = useCallback(({ changed, viewableItems }: { changed: any, viewableItems: any }) => {
     if (viewableItems.length > 0 && viewableItems[0].isViewable) {
       setActivePostId(viewableItems[0].item.id)
-
-
     }
   }, [])
 
@@ -51,6 +22,9 @@ export default function ReelsVideo() {
         data={getLocalVideoFilesFromAlbumArr}
         keyExtractor={(data) => String(data.id)}
         renderItem={({ item }) => {
+          if (item.filename.split('.').includes("HEVC-PSA")) {
+            return null
+          }
           return <VideoPost url={item.uri} activePostId={activePostId} postId={item.id} videoTitle={item.filename} />
         }}
         viewabilityConfig={{

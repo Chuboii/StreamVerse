@@ -8,8 +8,10 @@ import { useColorScheme } from '@/hooks/useColorScheme';
 import { usePathname } from "expo-router"
 import { Provider } from 'react-redux';
 import { store } from '@/lib/redux/store/store';
+import * as ScreenOrientation from 'expo-screen-orientation'
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
+
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
@@ -25,6 +27,7 @@ export default function RootLayout() {
   })
 
   useEffect(() => {
+
     if (loaded) {
       SplashScreen.hideAsync();
     }
