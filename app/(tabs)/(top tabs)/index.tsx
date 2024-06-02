@@ -5,7 +5,7 @@ import VideoTemplate from "@/components/video template/VideoTemplate";
 import Spinner from "@/components/spinner/Spinner";
 import { router } from "expo-router";
 import { useAppDispatch } from "@/hooks/use dispatch/useDispatch";
-import { localVideoContentUrl, localVideoFilesFromAlbum } from "@/lib/redux/reducers/storeLocalVideoData/storeLocalVideoData";
+import { localVideoAlbum, localVideoAlbumContents, localVideoFilesFromAlbum, localVideoSingleContentDetails } from "@/lib/redux/reducers/storeLocalVideoData/storeLocalVideoData";
 
 interface VideoAsset {
   id: string;
@@ -111,8 +111,8 @@ const VideoScreen: React.FC = () => {
     }
   };
 
-  const navigateToPlaySelectedLocalVideo = (url: string) => {
-    dispatch(localVideoContentUrl(url));
+  const navigateToPlaySelectedLocalVideo = (video: any) => {
+    dispatch(localVideoSingleContentDetails(video));
     router.navigate("local-video-player");
   };
 
@@ -149,7 +149,7 @@ const VideoScreen: React.FC = () => {
               wrapBoxStyle={undefined}
               videoId={video.id}
               videoAlbumTitle={video.albumTitle}
-              onClick={() => navigateToPlaySelectedLocalVideo(video.uri)}
+              onClick={() => navigateToPlaySelectedLocalVideo(video)}
             />
           ))
         )}

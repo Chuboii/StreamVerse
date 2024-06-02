@@ -1,79 +1,149 @@
 import { VLCPlayer, VlCPlayerView } from 'react-native-vlc-media-player';
 import { useAppSelector } from '@/hooks/use selector/useSelector'
-import { Dimensions, Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import Video, { VideoRef } from 'react-native-video';
+import { Dimensions, Pressable, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native'
+import Video, { VideoDecoderProperties, VideoRef } from 'react-native-video';
 import Button from '@/components/button template/Button';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
-import { useRef, useState } from 'react';
+import { ReactNode, useEffect, useRef, useState } from 'react';
 import { ThemedText } from '@/components/ThemedText';
 import Slider from '@react-native-community/slider';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const LocalVideoPlayer = () => {
     const videoRef = useRef<VideoRef>()
-    const getLocalVideoContentUrl = useAppSelector(state => state.localVideo.localVideoContentUrl)
-    const [status, setStatus] = useState({})
+    const getLocalVideoContentUrl = useAppSelector(state => state.localVideo.localVideoSingleContentDetails)
+    const [status, setStatus] = useState<{ isPlaying: boolean }>({})
+    const [storeLastTapOnVideo, setStoreLastTapOnVideo] = useState(null)
+    const [isHideTitleAndPlaybackControls, setIsHideTitleAndPlaybackControls] = useState(true)
+
+
+    useEffect(() => {
+        VideoDecoderProperties.isHEVCSupported().then((support) => {
+            console.log(support);
+
+        });
+    }, []);
+
+    useEffect(() => {
+        let timeout;
+        if (isHideTitleAndPlaybackControls) {
+            timeout = setTimeout(() => {
+                setIsHideTitleAndPlaybackControls(false)
+            }, 1500)
+        }
+
+        return () => clearTimeout(timeout)
+    }, [isHideTitleAndPlaybackControls])
 
 
     const togglePlayAndPauseLocalVideo = () => {
+
         if (!videoRef.current) return null
 
+        if (status.isPlaying) {
+            videoRef.current.pause()
+        }
+        else {
+            videoRef.current.resume()
+        }
 
-        videoRef.current.resume()
+    }
+
+    const handleVideoEndAndPlayFromBeginning = () => {
+
+        if (!videoRef.current) return null
+
+        videoRef.current.seek(0)
+    }
+
+    const handleErrorProducedFromVideoPlayback = (err) => {
+        console.log("error playing video")
+        console.log(err);
+    }
+
+    const handleDoubleTapPlayBacksOnVideo = () => {
+        const getCurrentTime = new Date()
+        setIsHideTitleAndPlaybackControls(true)
+
+        if (storeLastTapOnVideo && (getCurrentTime - storeLastTapOnVideo) < 300) {
+            if (!videoRef.current) return null
+            if (status.isPlaying) {
+                videoRef.current.pause()
+            }
+            else {
+                videoRef.current.resume()
+            }
+        }
+        else {
+            setStoreLastTapOnVideo(getCurrentTime)
+        }
 
 
     }
 
-
     return (
-        <>
-
-            <Video
-                source={{ uri: `${getLocalVideoContentUrl}` }}
-                // // Store reference  
-                // ref={videoRef}
-                // // Callback when remote video is buffering                                      
-                // onBuffer={onBuffer}
-                // // Callback when video cannot be loaded              
-                // onError={onError}
-                style={styles.backgroundVideo}
-                fullscreen={true}
-                fullscreenAutorotate={true}
-                pictureInPicture={true}
-                showNotificationControls={true}
-            />
-            <View style={styles.slider}>
-                <View style={styles.wrap}>
-                    <ThemedText>0:00</ThemedText>
-                    <ThemedText>0:00</ThemedText>
-                </View>
-                <Slider
-                    style={styles.slide}
-                    minimumValue={1000}
-                    maximumValue={100}
-                    minimumTrackTintColor="orangered"
-                    maximumTrackTintColor="#000000"
-                    thumbTintColor='orangered'
-
+        <Pressable style={styles.container} onPress={handleDoubleTapPlayBacksOnVideo}>
+            <>
+                {isHideTitleAndPlaybackControls &&
+                    <LinearGradient
+                        colors={['rgba(0,0,0,.8)', 'rgba(0,0,0,0)']}
+                        style={styles.gradient}
+                    >
+                        <ThemedText style={styles.title}>{getLocalVideoContentUrl.filename}</ThemedText>
+                    </LinearGradient>}
+                <Video
+                    source={{ uri: `${getLocalVideoContentUrl.uri}` }}
+                    // // Store reference  
+                    ref={videoRef}
+                    // // Callback when remote video is buffering                                      
+                    // onBuffer={onBuffer}
+                    // // Callback when video cannot be loaded              
+                    // onError={onError}
+                    onError={handleErrorProducedFromVideoPlayback}
+                    style={styles.backgroundVideo}
+                    resizeMode='contain'
+                    pictureInPicture={true}
+                    showNotificationControls={true}
+                    onPlaybackStateChanged={(state) => setStatus(state)}
+                    onEnd={handleVideoEndAndPlayFromBeginning}
                 />
-            </View>
-            <View style={styles.containerPlaybacks}>
-                <View style={styles.playbacks}>
-                    <Button component={
-                        <MaterialCommunityIcons name="screen-rotation-lock" size={24} color="black" style={styles.icon} />
-                    } disabled={false} />
-                    <Button component={
-                        <Ionicons name="lock-closed-outline" size={24} color="black" style={styles.icon} />
-                    } disabled={false} />
-                    <Button style={styles.play} onClick={togglePlayAndPauseLocalVideo} component={
-                        <Ionicons name={status.isPlaying ? "pause-outline" : "play"} size={24} color="black" style={[styles.icon]} />} disabled={false} />
-                    <Button component={
-                        <MaterialCommunityIcons name="phone-rotate-landscape" size={24} color="black" style={styles.icon} />
-                    } disabled={false} />
-                    <Button component={<Ionicons name="ellipsis-vertical" size={24} style={styles.icon} color="black" />} disabled={false} />
-                </View>
-            </View>
+                {isHideTitleAndPlaybackControls &&
+                    <>
+                        <View style={styles.slider}>
+                            <View style={styles.wrap}>
+                                <ThemedText>0:00</ThemedText>
+                                <ThemedText>0:00</ThemedText>
+                            </View>
+                            <Slider
+                                style={styles.slide}
+                                minimumValue={1000}
+                                maximumValue={100}
+                                minimumTrackTintColor="orangered"
+                                maximumTrackTintColor="#000000"
+                                thumbTintColor='orangered'
 
-        </>
+                            />
+                        </View>
+                        <View style={styles.containerPlaybacks}>
+                            <View style={styles.playbacks}>
+                                <Button component={
+                                    <MaterialCommunityIcons name="screen-rotation-lock" size={24} color="black" style={styles.icon} />
+                                } disabled={false} />
+                                <Button component={
+                                    <Ionicons name="lock-closed-outline" size={24} color="black" style={styles.icon} />
+                                } disabled={false} />
+                                <Button style={styles.play} onClick={togglePlayAndPauseLocalVideo} component={
+                                    <Ionicons name={status.isPlaying ? "pause-outline" : "play"} size={30} color="white" />} disabled={false} />
+                                <Button component={
+                                    <MaterialCommunityIcons name="phone-rotate-landscape" size={24} color="black" style={styles.icon} />
+                                } disabled={false} />
+                                <Button component={<Ionicons name="ellipsis-vertical" size={24} style={styles.icon} color="black" />} disabled={false} />
+                            </View>
+                        </View>
+                    </>
+                }
+            </>
+        </Pressable>
     )
 }
 
@@ -99,7 +169,8 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     icon: {
-        color: "white"
+        color: "white",
+        fontSize: 20
     },
     containerPlaybacks: {
         position: "absolute",
@@ -134,7 +205,20 @@ const styles = StyleSheet.create({
         borderRadius: 50,
         padding: 7,
         justifyContent: "center",
+        alignItems: "center",
+        fontSize: 20,
+        color: "white"
+    },
+    gradient: {
+        height: 80,
+        zIndex: 1,
+        justifyContent: "center",
         alignItems: "center"
+    },
+    title: {
+        fontFamily: "KanitRegular",
+        textAlign: "center",
+        marginHorizontal: 10
     }
 })
 

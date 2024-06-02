@@ -7,7 +7,7 @@ interface StoreLocalVideoDataProp {
   localVideoParentHeader: string | null;
   localVideoAlbum: Album[] | null;
   localVideoAlbumContents: [] | null;
-  localVideoContentUrl: string | null;
+  localVideoSingleContentDetails: {} | null;
   localVideoFilesFromAlbum: Album[] | null;
 }
 
@@ -15,7 +15,7 @@ const initialState: StoreLocalVideoDataProp = {
   localVideoParentHeader: null,
   localVideoAlbum: [],
   localVideoAlbumContents: [],
-  localVideoContentUrl: null,
+  localVideoSingleContentDetails: null,
   localVideoFilesFromAlbum: null,
 };
 
@@ -32,8 +32,8 @@ export const storeLocalVideoSlice = createSlice({
     localVideoAlbumContents(state, action: PayloadAction<[] | null>) {
       state.localVideoAlbumContents = action.payload;
     },
-    localVideoContentUrl(state, action: PayloadAction<string | null>) {
-      state.localVideoContentUrl = action.payload;
+    localVideoSingleContentDetails(state, action: PayloadAction<{} | null>) {
+      state.localVideoSingleContentDetails = action.payload;
     },
     localVideoFilesFromAlbum(state, action: PayloadAction<[] | null>) {
       state.localVideoFilesFromAlbum = action.payload;
@@ -45,7 +45,7 @@ export const {
   localVideoParentHeader,
   localVideoAlbum,
   localVideoAlbumContents,
-  localVideoContentUrl,
+  localVideoSingleContentDetails,
   localVideoFilesFromAlbum,
 } = storeLocalVideoSlice.actions;
 
