@@ -20,21 +20,20 @@ export const styles = StyleSheet.create({
   wrapper: {
     marginLeft: 25,
     justifyContent: "space-between",
-    width: "60%",
     paddingRight: 10,
   },
   wrap: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
+    width: "52%",
   },
   imageBox: {
     width: "40%",
   },
   img: {
     width: "100%",
-    height: "100%",
-    borderRadius: 10,
+    height: 60,
     zIndex: 19,
   },
   text: {
@@ -79,5 +78,8 @@ export const styles = StyleSheet.create({
     height: "80%",
     elevation: 5,
     borderRadius: 10,
+  },
+  imageWrapper: {
+    paddingHorizontal: 6,
   },
 });

@@ -1,6 +1,6 @@
 import { VLCPlayer, VlCPlayerView } from 'react-native-vlc-media-player';
 import { useAppSelector } from '@/hooks/use selector/useSelector'
-import { Dimensions, Pressable, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native'
+import { BackHandler, Dimensions, Pressable, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native'
 import Video, { VideoDecoderProperties, VideoRef } from 'react-native-video';
 import Button from '@/components/button template/Button';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
@@ -9,43 +9,67 @@ import { ThemedText } from '@/components/ThemedText';
 import Slider from '@react-native-community/slider';
 import { LinearGradient } from 'expo-linear-gradient';
 import * as ScreenOrientation from 'expo-screen-orientation';
-import { usePathname } from 'expo-router';
+import { router, usePathname } from 'expo-router';
 
+
+const videoResolution = ["contain", "cover", "stretch"]
 
 const LocalVideoPlayer = () => {
     const videoRef = useRef<VideoRef>()
     const getLocalVideoContentUrl = useAppSelector(state => state.localVideo.localVideoSingleContentDetails)
     const [status, setStatus] = useState<{ isPlaying: boolean }>({})
     const [storeLastTapOnVideo, setStoreLastTapOnVideo] = useState(null)
-    const [isHideTitleAndPlaybackControls, setIsHideTitleAndPlaybackControls] = useState(true)
+    const [isHideTitleAndPlaybackControls, setIsHideTitleAndPlaybackControls] = useState(false)
     const [storeCurrentVideoTime, setStoreCurrentVideoTime] = useState(null)
     const [storeTotalVideoTime, setStoreTotalVideoTime] = useState(null)
     const [storeTotalVideoTimeInSeconds, setStoreTotalVideoTimeInSeconds] = useState(0)
     const [storeCurrentVideoTimeInSeconds, setStoreCurrentVideoTimeInSeconds] = useState(0)
+    const [isOrientationLocked, setIsOrientationLocked] = useState(false)
+    const [increment, setIncrement] = useState(0)
+    const [storeVideoResolutionValue, setStoreVideoResolutionValue] = useState<string | null>("")
     const pathname = usePathname()
-    const [a, setA] = useState(null)
 
     useEffect(() => {
 
-        console.log(pathname);
+        Dimensions.addEventListener("change", (event) => {
+            console.log(event);
+        })
+        const backhandler = async () => {
+            const orientation = await ScreenOrientation.getOrientationLockAsync()
+            console.log(orientation);
 
 
-        ScreenOrientation.unlockAsync()
-
-        if (pathname === "/local-video-player") {
-            const subscription = ScreenOrientation.addOrientationChangeListener((event) => {
-                console.log('orientation change');
-
-                console.log(event);
-
-                handleOrientationChange(event.orientationInfo.orientation);
-            });
-
-            // Clean up the subscription on unmount
-            return () => {
-                ScreenOrientation.removeOrientationChangeListener(subscription);
-            };
+            if (orientation === 5 || orientation === 6 || orientation === 7) {
+                await ScreenOrientation.unlockAsync()
+                router.back()
+                return false
+            }
+            else if (orientation === 4 || orientation === 3 || orientation === 0) {
+                router.back()
+                return false
+            }
+            return true
         }
+        BackHandler.addEventListener("hardwareBackPress", backhandler)
+
+        return () => BackHandler.removeEventListener("hardwareBackPress", backhandler)
+    }, [])
+
+    useEffect(() => {
+
+        const subscription = ScreenOrientation.addOrientationChangeListener((event) => {
+            console.log('orientation change');
+
+            console.log(event);
+
+            handleOrientationChange(event.orientationInfo.orientation);
+        });
+
+        // Clean up the subscription on unmount
+        return () => {
+            ScreenOrientation.removeOrientationChangeListener(subscription);
+        };
+
     }, []);
 
     const handleOrientationChange = (orientation) => {
@@ -83,16 +107,19 @@ const LocalVideoPlayer = () => {
     }, []);
 
     useEffect(() => {
-        // let timeout;
-        // if (isHideTitleAndPlaybackControls) {
-        //     timeout = setTimeout(() => {
-        //         setIsHideTitleAndPlaybackControls(false)
-        //     }, 3000)
+        let timeout;
 
-        // }
+        if (status.isPlaying) {
+            timeout = setTimeout(() => {
+                setIsHideTitleAndPlaybackControls(false)
+            }, 2500)
+        }
+        else {
+            setIsHideTitleAndPlaybackControls(true)
+        }
 
-        // return () => clearTimeout(timeout)
-    }, [isHideTitleAndPlaybackControls])
+        return () => clearTimeout(timeout)
+    }, [isHideTitleAndPlaybackControls, status.isPlaying])
 
 
     const togglePlayAndPauseLocalVideo = () => {
@@ -122,8 +149,13 @@ const LocalVideoPlayer = () => {
 
     const handleDoubleTapPlayBacksOnVideo = () => {
         const getCurrentTime = new Date()
-        setIsHideTitleAndPlaybackControls(true)
 
+        if (isHideTitleAndPlaybackControls) {
+            setIsHideTitleAndPlaybackControls(false)
+        }
+        else {
+            setIsHideTitleAndPlaybackControls(true)
+        }
         if (storeLastTapOnVideo && (getCurrentTime - storeLastTapOnVideo) < 300) {
             if (!videoRef.current) return null
             if (status.isPlaying) {
@@ -189,25 +221,54 @@ const LocalVideoPlayer = () => {
     }
 
     const handleLandscapeOrientation = async () => {
-        if (pathname !== "/local-video-player") {
-            await ScreenOrientation.unlockAsync();
+        const getOrientationState = await ScreenOrientation.getOrientationLockAsync()
+
+
+        if (isOrientationLocked) {
+            console.log("orientation is locked, open to rotate");
         }
         else {
-            const getOrientationState = await ScreenOrientation.getOrientationLockAsync()
-            console.log(getOrientationState);
-
-            if (getOrientationState !== 6) {
-                await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);
-            } else {
+            if (getOrientationState === 6 || getOrientationState === 5) {
                 await ScreenOrientation.unlockAsync();
+            } else {
+                await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);
             }
+        }
+
+    }
+
+    const handleLockCurrentScreenOrientation = async () => {
+        const getScreenOrientation = await ScreenOrientation.getOrientationLockAsync()
+
+        if (isOrientationLocked) {
+            await ScreenOrientation.unlockAsync()
+            setIsOrientationLocked(false)
+        }
+        else {
+            if (getScreenOrientation === 0 || getScreenOrientation === 3 || getScreenOrientation === 4) {
+                await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT);
+                setIsOrientationLocked(true)
+            }
+            else {
+                await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);
+                setIsOrientationLocked(true)
+            }
+
         }
     }
 
-    const handleLockCurrentScreenOrientation = () => {
+
+    const handleChangeInVideoResolution = () => {
+        setIncrement(c => c + 1)
+
+        if (increment < videoResolution.length) {
+            setStoreVideoResolutionValue(videoResolution[increment])
+        }
+        else {
+            setIncrement(0)
+        }
 
     }
-
     const handleValueChange = (value) => {
         // console.log(value);
         // // Add any additional logic here
@@ -222,12 +283,13 @@ const LocalVideoPlayer = () => {
                     >
                         <ThemedText style={styles.title}>{getLocalVideoContentUrl.filename}</ThemedText>
                     </LinearGradient>}
+
                 <Video
                     source={{ uri: `${getLocalVideoContentUrl.uri}` }}
                     ref={videoRef}
                     onError={handleErrorProducedFromVideoPlayback}
                     style={styles.backgroundVideo}
-                    resizeMode='contain'
+                    resizeMode={storeVideoResolutionValue}
                     pictureInPicture={true}
                     showNotificationControls={true}
                     onPlaybackStateChanged={(state) => setStatus(state)}
@@ -239,42 +301,47 @@ const LocalVideoPlayer = () => {
                 />
                 {isHideTitleAndPlaybackControls &&
                     <>
+                        <LinearGradient
+                            colors={['rgba(0,0,0,0)', 'rgba(0,0,0,.9)']}
+                            style={styles.containerPlaybacks}
+                        >
+                            <View style={[styles.wrap]}>
+                                <ThemedText style={styles.text}>{storeCurrentVideoTime}</ThemedText>
+                                <ThemedText style={styles.text}>{storeTotalVideoTime}</ThemedText>
+                            </View>
 
-                        <View style={[styles.wrap]}>
-                            <ThemedText>{storeCurrentVideoTime}</ThemedText>
-                            <ThemedText>{storeTotalVideoTime}</ThemedText>
-                        </View>
+                            <Slider
+                                style={styles.slider}
+                                minimumValue={0}
+                                maximumValue={storeTotalVideoTimeInSeconds}
+                                minimumTrackTintColor="orangered"
+                                maximumTrackTintColor="gray"
+                                thumbTintColor='orangered'
 
-                        <Slider
-                            style={styles.slider}
-                            minimumValue={0}
-                            maximumValue={storeTotalVideoTimeInSeconds}
-                            minimumTrackTintColor="orangered"
-                            maximumTrackTintColor="gray"
-                            thumbTintColor='orangered'
+                                value={storeCurrentVideoTimeInSeconds}
+                                onValueChange={handleWhenUserPicksUpTheSliderInitially}
+                                onSlidingStart={handleWhenUserPicksUpTheSliderInitially}
+                            />
 
-                            value={storeCurrentVideoTimeInSeconds}
-                            onValueChange={handleWhenUserPicksUpTheSliderInitially}
-                            onSlidingStart={handleWhenUserPicksUpTheSliderInitially}
-                        />
-
-
-                        <View style={styles.containerPlaybacks}>
                             <View style={styles.playbacks}>
-                                <Button component={
-                                    <MaterialCommunityIcons name="screen-rotation-lock" size={24} color="black" style={styles.icon} />
-                                } disabled={false} />
-                                <Button component={
-                                    <Ionicons name="lock-closed-outline" size={24} color="black" style={styles.icon} />
-                                } disabled={false} />
+                                <View style={styles.wrapper}>
+                                    <Button onClick={handleChangeInVideoResolution} component={
+                                        <MaterialCommunityIcons name="monitor-screenshot" size={24} color="black" style={styles.icon} />
+                                    } disabled={false} />
+                                    <Button onClick={handleLockCurrentScreenOrientation} component={
+                                        <Ionicons name={isOrientationLocked ? "lock-closed-outline" : "lock-open-outline"} size={24} color="black" style={[styles.icon, styles.left]} />
+                                    } disabled={false} />
+                                </View>
                                 <Button style={styles.play} onClick={togglePlayAndPauseLocalVideo} component={
                                     <Ionicons name={status.isPlaying ? "pause-outline" : "play"} size={30} color="white" />} disabled={false} />
-                                <Button onClick={handleLandscapeOrientation} component={
-                                    <MaterialCommunityIcons name="phone-rotate-landscape" size={24} color="black" style={styles.icon} />
-                                } disabled={false} />
-                                <Button component={<Ionicons name="ellipsis-vertical" size={24} style={styles.icon} color="black" />} disabled={false} />
+                                <View style={styles.wrapper}>
+                                    <Button onClick={handleLandscapeOrientation} component={
+                                        <MaterialCommunityIcons name="phone-rotate-landscape" size={24} color="black" style={styles.icon} />
+                                    } disabled={false} />
+                                    <Button component={<Ionicons name="ellipsis-vertical" size={24} style={[styles.icon, styles.left]} color="black" />} disabled={false} />
+                                </View>
                             </View>
-                        </View>
+                        </LinearGradient>
                     </>
                 }
             </>
@@ -283,45 +350,46 @@ const LocalVideoPlayer = () => {
 }
 
 export default LocalVideoPlayer
+
+const screenWidth = Dimensions.get("screen").width
+
+const screenHeight = Dimensions.get("screen").height
+
+
 const styles = StyleSheet.create({
     container: {
-        flex: 1
-    },
-    video: {
-        width: 100,
-        height: 200
+        flex: 1,
     },
     backgroundVideo: {
-        position: 'absolute',
-        top: 0,
+        width: screenWidth,
+        height: screenHeight,
+        position: "absolute",
         left: 0,
-        bottom: 0,
         right: 0,
+        bottom: 0,
+        padding: 0,
+
     },
     playbacks: {
         flexDirection: "row",
         justifyContent: "space-between",
-        alignItems: 'center'
+        alignItems: 'center',
+        paddingHorizontal: 15
     },
     icon: {
         color: "white",
-        fontSize: 20
+        fontSize: 20,
     },
     containerPlaybacks: {
         position: "absolute",
         left: 0,
         right: 0,
         bottom: 0,
-        padding: 20,
-        backgroundColor: "rgba(0,0,0,0.2)",
+        padding: 0,
+        height: 100
     },
     slider: {
-        position: "absolute",
-        bottom: 75,
-        width: Dimensions.get("window").width,
         height: 30,
-        left: 0,
-        right: 0,
         zIndex: 2,
 
     },
@@ -332,10 +400,11 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "space-between",
         paddingHorizontal: 15,
-        position: "absolute",
-        bottom: 110,
-        left: 0,
-        right: 0,
+        top: 5
+    },
+    wrapper: {
+        flexDirection: "row",
+        alignItems: 'center',
     },
     play: {
         borderColor: "white",
@@ -357,159 +426,12 @@ const styles = StyleSheet.create({
         fontFamily: "KanitRegular",
         textAlign: "center",
         marginHorizontal: 10
+    },
+    left: {
+        marginLeft: 50
+    },
+    text: {
+        fontFamily: "KanitRegular",
+        fontSize: 14
     }
 })
-
-// import { Dimensions, Pressable, StyleSheet, Text, View } from 'react-native'
-// import React, { useEffect, useRef, useState } from 'react'
-// import { AVPlaybackStatus, AVPlaybackStatusSuccess, ResizeMode, Video } from 'expo-av'
-// import { useAppSelector } from '@/hooks/use selector/useSelector'
-// import * as ScreenOrientation from 'expo-screen-orientation';
-// import { AntDesign, Ionicons, MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
-// import Button from '@/components/button template/Button';
-// import Slider from '@react-native-community/slider';
-// import { ThemeProvider } from '@react-navigation/native';
-// import { ThemedText } from '@/components/ThemedText';
-
-
-// const LocalVideoPlayer = () => {
-//     const getLocalVideoContentUrl = useAppSelector(state => state.localVideo.localVideoContentUrl)
-//     const videoRef = useRef(null)
-//     const [landscape, setLandscape] = useState(false)
-//     const [status, setStatus] = useState<AVPlaybackStatusSuccess>({})
-
-//     useEffect(() => {
-//         const setScreenOrientation = async () => {
-//             const response = await ScreenOrientation.getOrientationAsync()
-
-//             console.log(response);
-
-
-
-//         }
-
-//         setScreenOrientation()
-//     }, [])
-
-
-//     const togglePlayAndPauseLocalVideo = () => {
-//         if (!videoRef.current) return null
-
-
-//         if (status.isPlaying) {
-//             videoRef.current.pauseAsync()
-//         }
-//         else if (status.didJustFinish) {
-//             console.log("yeszs");
-
-//             videoRef.current.replayAsync()
-//         }
-//         else {
-//             videoRef.current.playAsync()
-//         }
-//     }
-
-
-//     return (
-//         <>
-
-//             <View style={styles.slider}>
-//                 <View style={styles.wrap}>
-//                     <ThemedText>0:00</ThemedText>
-//                     <ThemedText>0:00</ThemedText>
-//                 </View>
-//                 <Slider
-//                     style={styles.slide}
-//                     minimumValue={1000}
-//                     maximumValue={100}
-//                     minimumTrackTintColor="orangered"
-//                     maximumTrackTintColor="#000000"
-//                     thumbTintColor='orangered'
-
-//                 />
-//             </View>
-//             <Pressable >
-//                 <Video
-//                     style={styles.video}
-//                     shouldPlay={true}
-//                     resizeMode={ResizeMode.COVER}
-//                     source={{ uri: `${getLocalVideoContentUrl}` }}
-//                     ref={videoRef}
-//                     onPlaybackStatusUpdate={status => setStatus(status)}
-//                 />
-
-//                 <View style={styles.containerPlaybacks}>
-//                     <View style={styles.playbacks}>
-//                         <Button component={
-//                             <MaterialCommunityIcons name="screen-rotation-lock" size={24} color="black" style={styles.icon} />
-//                         } disabled={false} />
-//                         <Button component={
-//                             <Ionicons name="lock-closed-outline" size={24} color="black" style={styles.icon} />
-//                         } disabled={false} />
-//                         <Button style={styles.play} onClick={togglePlayAndPauseLocalVideo} component={
-//                             <Ionicons name={status.isPlaying ? "pause-outline" : "play"} size={24} color="black" style={[styles.icon]} />} disabled={false} />
-//                         <Button component={
-//                             <MaterialCommunityIcons name="phone-rotate-landscape" size={24} color="black" style={styles.icon} />
-//                         } disabled={false} />
-//                         <Button component={<Ionicons name="ellipsis-vertical" size={24} style={styles.icon} color="black" />} disabled={false} />
-//                     </View>
-//                 </View>
-//             </Pressable >
-//         </ >
-//     )
-// }
-
-// export default LocalVideoPlayer
-
-// const styles = StyleSheet.create({
-//     container: {
-//         flex: 1
-//     },
-//     video: {
-//         width: "100%",
-//         height: "100%"
-//     },
-// playbacks: {
-//     flexDirection: "row",
-//         justifyContent: "space-between",
-//             alignItems: 'center'
-// },
-// icon: {
-//     color: "white"
-// },
-// containerPlaybacks: {
-//     position: "absolute",
-//         left: 0,
-//             right: 0,
-//                 bottom: 0,
-//                     padding: 20,
-//                         backgroundColor: "rgba(0,0,0,0.2)",
-//     },
-// slider: {
-//     position: "absolute",
-//         bottom: 100,
-//             width: Dimensions.get("window").width,
-//                 height: 30,
-//                     left: 0,
-//                         right: 0,
-//                             zIndex: 2,
-
-//     },
-// slide: {
-//     marginTop: 10,
-//     },
-// wrap: {
-//     flexDirection: "row",
-//         justifyContent: "space-between",
-//             paddingHorizontal: 15
-
-// },
-// play: {
-//     borderColor: "white",
-//         borderWidth: 1.5,
-//             borderRadius: 50,
-//                 padding: 7,
-//                     justifyContent: "center",
-//                         alignItems: "center"
-// }
-// })

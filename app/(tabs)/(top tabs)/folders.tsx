@@ -26,6 +26,7 @@ const VideoFoldersList: React.FC = () => {
   const [permissionResponse, requestPermission] = MediaLibrary.usePermissions();
   const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(false);
+  const [localVideoContentUrl, setLocalVideoContentUrl] = useState<any[]>([])
 
   useEffect(() => {
     getAlbums();
@@ -43,6 +44,7 @@ const VideoFoldersList: React.FC = () => {
       });
 
       const filteredEmptyAlbums: Album[] = [];
+      const arrOfVideoImageUrls: any[] = []
 
       for (const alb of fetchedAlbums) {
         const albumAssets = await MediaLibrary.getAssetsAsync({
@@ -54,19 +56,29 @@ const VideoFoldersList: React.FC = () => {
         if (albumAssets.assets.length > 0) {
           const assetDetails = await Promise.all(
             albumAssets.assets.map(async (asset) => {
-              const assetInfo = await MediaLibrary.getAssetInfoAsync(asset.id);
+              const assetInfo = await MediaLibrary.getAssetInfoAsync(asset.id)
               return assetInfo;
             })
           );
 
+
           if (assetDetails.length > 0) {
-            filteredEmptyAlbums.push({ ...alb, assetCount: assetDetails.length });
+            filteredEmptyAlbums.push({ ...alb });
+            arrOfVideoImageUrls.push(assetDetails[0].uri[0]);
+
           }
         }
       }
 
+      if (arrOfVideoImageUrls.length > 0) {
+        setLocalVideoContentUrl(arrOfVideoImageUrls);
+        console.log(arrOfVideoImageUrls);
+
+      }
+
       if (filteredEmptyAlbums.length > 0) {
         const sortByTitleAscending = filteredEmptyAlbums.sort((a, b) => a.title.localeCompare(b.title));
+
         setAlbums(sortByTitleAscending);
         dispatch(localVideoAlbum(sortByTitleAscending));
       }
@@ -77,12 +89,16 @@ const VideoFoldersList: React.FC = () => {
     }
   };
 
-  const navigateToFolderContents = (id: string, album): void => {
-    console.log(album);
-    dispatch(localVideoAlbumContents(album))
-    router.push({
-      pathname: `video-list/${id}`,
-    });
+  const navigateToFolderContents = async (id: string, album): void => {
+    try {
+      dispatch(localVideoAlbumContents(album))
+      router.push({
+        pathname: `video-list/${id}`,
+      });
+    }
+    catch (err) {
+      console.log(err)
+    }
   }
 
   return (
@@ -90,14 +106,18 @@ const VideoFoldersList: React.FC = () => {
       <ScrollView>
         {loading && <Spinner message='Fetching video folders' />}
         <View style={styles.wrap}>
-          {albums && albums.map((album) => (
-            <Button
-              key={album.id}
-              disabled={false}
-              onClick={() => navigateToFolderContents(album.id, album)}
-              component={<VideoFolder totalNumOfVideos={album.assetCount} folderName={album.title} />}
-            />
-          ))}
+          {albums && albums.map((album) => {
+            console.log("count" + album.assetCount);
+
+            return (
+              <Button
+                key={album.id}
+                disabled={false}
+                onClick={() => navigateToFolderContents(album.id, album)}
+                component={<VideoFolder totalNumOfVideos={album.assetCount} videoImageUrl={localVideoContentUrl} folderName={album.title} />}
+              />
+            )
+          })}
         </View>
       </ScrollView>
     </SafeAreaView>

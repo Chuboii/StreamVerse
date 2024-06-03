@@ -13,7 +13,7 @@ import * as MediaLibrary from 'expo-media-library';
 
 
 type Prop = {
-  imageUrl: ImageSourcePropType | undefined;
+  imageUrl: [] | undefined | string;
   imageStyle: object | undefined;
   containerStyle: object | undefined;
   wrapperStyle: object | undefined;
@@ -32,7 +32,7 @@ type Prop = {
   fileLocalUrl: string | undefined;
 };
 const PlayListTemplate = ({
-  imageUrl = undefined,
+  imageUrl = [],
   imageStyle = {},
   containerStyle = {},
   wrapperStyle = {},
@@ -46,14 +46,58 @@ const PlayListTemplate = ({
   fileLocalUrl = ""
 }: Prop) => {
   const colorScheme = useColorScheme();
+  const [thumbnailUrl, setThumbnailUrl] = useState(null)
+  const [localFileUrl, setLocalFileUrl] = useState('')
   const iconStyle =
     colorScheme === "light" ? styles.iconLight : styles.iconDark;
+
+
+  useEffect(() => {
+    if (imageUrl.length > 0) {
+      setLocalFileUrl(imageUrl[0])
+    }
+  }, [])
+
+
+  // useEffect(() => {
+  //   generateThumbnail()
+  // }, [])
+
+
+
+  // const generateThumbnail = async () => {
+  //   try {
+
+  //     if (localFileUrl) {
+
+  //       const { uri: thumbnailUri } = await VideoThumbnails.getThumbnailAsync(
+  //         localFileUrl.uri,
+  //         {
+  //           time: 500,
+  //         }
+  //       );
+  //       console.log(thumbnailUri);
+
+  //       setThumbnailUrl(thumbnailUri)
+  //     }
+  //   } catch (error) {
+  //     console.error("Error generating thumbnail:", error);
+  //   }
+  // };
 
 
   return (
     <View style={[styles.container, containerStyle]}>
       <View style={[styles.imageBox, imageBoxStyle]}>
-        <Image style={styles.img} source={imageUrl} alt="sh" />
+        <View style={styles.imageWrapper}>
+          {
+
+            <View style={styles.wrap}>
+              <Image style={styles.img} source={require('../../assets/images/dummy.jpeg')} alt="sh" />
+            </View>
+          }
+        </View>
+
         <View style={styles.imageBox}></View>
         <View style={styles.imageShade}></View>
         <View style={styles.imageShade2}></View>

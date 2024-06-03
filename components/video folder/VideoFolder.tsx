@@ -9,12 +9,15 @@ import * as MediaLibrary from "expo-media-library";
 type Prop = {
   folderName: string;
   totalNumOfVideos: string | number;
+  videoImageUrl: []
 };
-const VideoFolder: FC<Prop> = ({ folderName, totalNumOfVideos, url }) => {
+const VideoFolder: FC<Prop> = ({ folderName, totalNumOfVideos, videoImageUrl }) => {
+
+
   return (
     <View style={styles.container}>
       <PlayListTemplate
-        imageUrl={require("../../assets/images/dummy.jpeg")}
+        imageUrl={videoImageUrl}
         title={folderName}
         lengthOfVideos=""
         numOfVideos={totalNumOfVideos}

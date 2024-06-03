@@ -23,21 +23,13 @@ const VideoScreen: React.FC = () => {
   const [permissionResponse, requestPermission] = MediaLibrary.usePermissions();
   const [thumbnailUrl, setThumbnailUrl] = useState<string>("");
   const [loading, setLoading] = useState(false);
-  const [updateOrientation, setUpdateOrientation] = useState(false)
+
   const dispatch = useAppDispatch();
-  const pathname = usePathname()
 
   useEffect(() => {
 
-    if (pathname === "/") {
-      const unlockScreenOrientation = async () => {
-        ScreenOrientation.unlockAsync()
-        setUpdateOrientation(true)
-      }
-      unlockScreenOrientation()
-    }
     getAlbums();
-  }, [loading, updateOrientation]);
+  }, [loading]);
 
   const getAlbums = async () => {
     try {
