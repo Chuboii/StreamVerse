@@ -10,9 +10,9 @@ import Slider from '@react-native-community/slider';
 import { LinearGradient } from 'expo-linear-gradient';
 import * as ScreenOrientation from 'expo-screen-orientation';
 import { router, usePathname } from 'expo-router';
+import { AntDesign } from '@expo/vector-icons';
 
-
-const videoResolution = ["contain", "cover", "stretch"]
+const videoResolution = ["container","cover", "stretch"]
 
 const LocalVideoPlayer = () => {
     const videoRef = useRef<VideoRef>()
@@ -25,8 +25,14 @@ const LocalVideoPlayer = () => {
     const [storeTotalVideoTimeInSeconds, setStoreTotalVideoTimeInSeconds] = useState(0)
     const [storeCurrentVideoTimeInSeconds, setStoreCurrentVideoTimeInSeconds] = useState(0)
     const [isOrientationLocked, setIsOrientationLocked] = useState(false)
-    const [increment, setIncrement] = useState(0)
-    const [storeVideoResolutionValue, setStoreVideoResolutionValue] = useState<string | null>("")
+    const [increment, setIncrement] = useState(1)
+    const [storeVideoResolutionValue, setStoreVideoResolutionValue] =
+    useState<string | null>(videoResolution[0])
+    const [storeDoubleTapSeekCountsFromVideo,
+    setStoreDoubleTapSeekCountsFromVideo] =
+    useState(0)
+    const [enableDisplayOfForwardSeekTapDuration, setEnableDisplayOfForwardSeekDuration] = useState(false)
+    const [enableDisplayOfBackwardSeekTapDuration, setEnableDisplayOfBackwardSeekDuration] = useState(false)
     const pathname = usePathname()
 
     useEffect(() => {
@@ -36,9 +42,7 @@ const LocalVideoPlayer = () => {
         })
         const backhandler = async () => {
             const orientation = await ScreenOrientation.getOrientationLockAsync()
-            console.log(orientation);
-
-
+            
             if (orientation === 5 || orientation === 6 || orientation === 7) {
                 await ScreenOrientation.unlockAsync()
                 router.back()
@@ -111,8 +115,8 @@ const LocalVideoPlayer = () => {
 
         if (status.isPlaying) {
             timeout = setTimeout(() => {
-                setIsHideTitleAndPlaybackControls(false)
-            }, 2500)
+           setIsHideTitleAndPlaybackControls(false)
+            },3000)
         }
         else {
             setIsHideTitleAndPlaybackControls(true)
@@ -150,7 +154,7 @@ const LocalVideoPlayer = () => {
     const handleDoubleTapPlayBacksOnVideo = () => {
         const getCurrentTime = new Date()
 
-        if (isHideTitleAndPlaybackControls) {
+        if (status.isPlaying && isHideTitleAndPlaybackControls) {
             setIsHideTitleAndPlaybackControls(false)
         }
         else {
@@ -197,6 +201,7 @@ const LocalVideoPlayer = () => {
 
         setStoreCurrentVideoTimeInSeconds(currentTime)
 
+//console.log(currentTime)
         const hours = Math.floor(currentTime / 3600)
         const minutes = Math.floor((currentTime % 3600) / 60)
         const seconds = Math.floor(currentTime % 60)
@@ -221,23 +226,29 @@ const LocalVideoPlayer = () => {
     }
 
     const handleLandscapeOrientation = async () => {
+      try{
         const getOrientationState = await ScreenOrientation.getOrientationLockAsync()
-
 
         if (isOrientationLocked) {
             console.log("orientation is locked, open to rotate");
         }
         else {
-            if (getOrientationState === 6 || getOrientationState === 5) {
-                await ScreenOrientation.unlockAsync();
-            } else {
+            if (getOrientationState === 0 || getOrientationState === 3 ||
+            getOrientationState === 4 || getOrientationState === 5) {
+                await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT);
+            }
+            else {
                 await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);
             }
         }
-
+}
+catch(err){
+  console.log(err)
+}
     }
 
     const handleLockCurrentScreenOrientation = async () => {
+      try{
         const getScreenOrientation = await ScreenOrientation.getOrientationLockAsync()
 
         if (isOrientationLocked) {
@@ -245,22 +256,19 @@ const LocalVideoPlayer = () => {
             setIsOrientationLocked(false)
         }
         else {
-            if (getScreenOrientation === 0 || getScreenOrientation === 3 || getScreenOrientation === 4) {
-                await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT);
-                setIsOrientationLocked(true)
-            }
-            else {
-                await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);
-                setIsOrientationLocked(true)
-            }
-
+          setIsOrientationLocked(true)
         }
+      }
+      catch(err){
+        console.log(err)
+      }
     }
 
 
     const handleChangeInVideoResolution = () => {
         setIncrement(c => c + 1)
-
+        setIsHideTitleAndPlaybackControls(true)
+      
         if (increment < videoResolution.length) {
             setStoreVideoResolutionValue(videoResolution[increment])
         }
@@ -269,11 +277,86 @@ const LocalVideoPlayer = () => {
         }
 
     }
+    
     const handleValueChange = (value) => {
         // console.log(value);
         // // Add any additional logic here
     };
+    
+    const handleRightDoubleTapToForwardTheVideo = () => {
+      const getCurrentTime = new Date()
+
+        if (status.isPlaying && isHideTitleAndPlaybackControls) {
+            setIsHideTitleAndPlaybackControls(false)
+        }
+        else {
+            setIsHideTitleAndPlaybackControls(true)
+        }
+        
+      if(storeLastTapOnVideo && (getCurrentTime - storeLastTapOnVideo) < 300){
+    if(!videoRef.current) return null
+        videoRef.current.seek(storeCurrentVideoTimeInSeconds + 10)
+setEnableDisplayOfForwardSeekDuration(true)
+
+setTimeout(()=> {
+setEnableDisplayOfForwardSeekDuration(false)
+}, 500)
+
+      }
+      else{
+setStoreLastTapOnVideo(getCurrentTime)
+  setEnableDisplayOfForwardSeekDuration(false)
+      }
+      
+    }
+    
+    
+    const handleLeftDoubleTapToBackwardTheVideo = () => {
+const getCurrentTime = new Date()
+        if (status.isPlaying && isHideTitleAndPlaybackControls) {
+            setIsHideTitleAndPlaybackControls(false)
+        }
+        else {
+            setIsHideTitleAndPlaybackControls(true)
+        }
+      if(storeLastTapOnVideo && (getCurrentTime - storeLastTapOnVideo) < 300){
+        if(!videoRef.current) return null
+        videoRef.current.seek(storeCurrentVideoTimeInSeconds - 10)
+    setEnableDisplayOfBackwardSeekDuration(true)
+
+setTimeout(()=> {
+setEnableDisplayOfBackwardSeekDuration(false)
+}, 500)
+}
+else{
+  setStoreLastTapOnVideo(getCurrentTime)
+  setEnableDisplayOfBackwardSeekDuration(false)
+}
+    }
     return (
+    <>
+    <TouchableOpacity style={styles.leftTouch}
+    onPress={handleLeftDoubleTapToBackwardTheVideo}>
+    <AntDesign style={[styles.iconForward, {color: enableDisplayOfBackwardSeekTapDuration ?
+     "rgba(255,255,255,.8)"
+     : "rgba(255,255,255,0)"}]} name="banckward" color="black" />
+     <Text style={[styles.textForward,{color:
+     enableDisplayOfBackwardSeekTapDuration ?
+     "rgba(255,255,255,.8)"
+     : "rgba(255,255,255,0)"}]}> -10s (1:10) </Text>
+    </TouchableOpacity>
+    
+     <TouchableOpacity
+     style={[styles.rightTouch]}
+     onPress={handleRightDoubleTapToForwardTheVideo}>
+    <AntDesign style={[styles.iconForward, {color: enableDisplayOfForwardSeekTapDuration ?
+     "rgba(255,255,255,.8)"
+     : "rgba(255,255,255,0)"}]} name="forward"
+     color="black" />
+     <Text style={[styles.textForward, {color:enableDisplayOfForwardSeekTapDuration ?
+     "rgba(255,255,255,1)"
+     : "rgba(255,255,255,0)"}]}> +10s (1:10) </Text>
+    </TouchableOpacity>
         <Pressable style={styles.container} onPress={handleDoubleTapPlayBacksOnVideo}>
             <>
                 {isHideTitleAndPlaybackControls &&
@@ -346,6 +429,7 @@ const LocalVideoPlayer = () => {
                 }
             </>
         </Pressable >
+        </>
     )
 }
 
@@ -379,6 +463,7 @@ const styles = StyleSheet.create({
     icon: {
         color: "white",
         fontSize: 20,
+        padding:10
     },
     containerPlaybacks: {
         position: "absolute",
@@ -433,5 +518,44 @@ const styles = StyleSheet.create({
     text: {
         fontFamily: "KanitRegular",
         fontSize: 14
+    },
+    leftTouch:{
+      position:"absolute",
+      top:"50%",
+      transform: [
+        {translateY: -( 350 /2) }
+        ],
+      left:0,
+      height:350,
+      width:"30%",
+      borderTopRightRadius:560,
+      zIndex:3,
+      borderBottomRightRadius:560,
+      justifyContent:"center",
+      alignItems:'center',
+    },
+    rightTouch:{
+      position:"absolute",
+      top:"50%",
+      right:0,
+      transform: [
+        {translateY: -( 350 /2) }
+        ],
+      height:350,
+      width:"30%",
+      borderTopLeftRadius:560,
+      zIndex:3,
+      borderBottomLeftRadius:560,
+      justifyContent:"center",
+      alignItems:'center'
+    },
+    textForward:{
+      color:"white",
+      fontFamily:"KanitRegular",
+      top:10
+    },
+    iconForward:{
+      color:"white",
+      fontSize:18
     }
 })
